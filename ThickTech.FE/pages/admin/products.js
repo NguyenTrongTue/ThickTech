@@ -104,16 +104,34 @@ export default function Products() {
           <table className="basic mt-2">
             <thead>
               <tr>
+                <td className="text-center hidden lg:block md:block xl:block sm:block">
+                  No.
+                </td>
                 <td>Product name</td>
-                <td className="text-center">Origin Price</td>
-                <td className="text-center">Sell Price</td>
-                <td className="text-center">Action</td>
+                <td className="text-center whitespace-nowrap">Origin Price</td>
+                <td className="text-center whitespace-nowrap">Sell Price</td>
+                <td className="text-center whitespace-nowrap">Action</td>
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((product) => (
+              {currentItems.map((product, index) => (
                 <tr key={product._id}>
-                  <td>{product.title}</td>
+                  <td className="text-center hidden lg:block md:block xl:block sm:block">
+                    {index + 1}
+                  </td>
+                  <td>
+                    <span
+                      className="line-clamp-1 overflow-hidden"
+                      style={{
+                        display: "-webkit-box",
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {product.title}
+                    </span>
+                  </td>
                   <td className="text-center">{product.original_price}</td>
                   <td className="text-center">{product.selling_price}</td>
                   <td className="text-center">
@@ -183,11 +201,14 @@ export default function Products() {
               pageRangeDisplayed={5}
               marginPagesDisplayed={2}
               onPageChange={handlePageChange}
+              previousLabel={"<"}
+              nextLabel={">"}
               containerClassName="pagination flex items-center justify-between"
-              pageClassName="page-itemborder mx-1 rounded hover:bg-gray-200"
-              pageLinkClassName="page-link text-blue-500"
-              previousClassName="previous-item border rounded hover:bg-gray-200"
-              nextClassName="next-item border rounded hover:bg-gray-200"
+              pageClassName="mx-1 rounded hover:bg-gray-200"
+              pageLinkClassName="page-link text-blue-500 p-2 rounded focus:outline-none bg-white"
+              activeLinkClassName="bg-slate-600 text-white"
+              previousClassName="previous-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
+              nextClassName="next-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
               disabledClassName="disabled text-gray-400"
             />
           </div>

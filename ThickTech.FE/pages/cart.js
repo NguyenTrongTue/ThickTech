@@ -11,8 +11,13 @@ import toast from "react-hot-toast";
 import ButtonLink from "@/components/client/button/ButtonLink";
 
 export default function CartPage() {
-  const { cartProducts, addProduct, decreaseProduct, removeProduct } =
-    useContext(CartContext);
+  const {
+    cartProducts,
+    addProduct,
+    decreaseProduct,
+    removeProduct,
+    clearCart,
+  } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,6 +51,8 @@ export default function CartPage() {
       setTotalItems(total);
       fetchCartItems(ids);
     } else {
+      clearCart();
+      setTotalItems(0);
       setProducts([]);
     }
   }, [cartProducts]);
@@ -54,8 +61,13 @@ export default function CartPage() {
     addProduct(id);
   }
 
-  function lessOfThisProduct(id) {
-    decreaseProduct(id);
+  function lessOfThisProduct(id, quanity, title) {
+    if (quanity === 1) {
+      OpenModal(id, title);
+      return;
+    } else {
+      decreaseProduct(id);
+    }
   }
 
   let total = 0;
@@ -146,7 +158,13 @@ export default function CartPage() {
                             </div>
                             <div className="ml-4 mt-2 flex items-center">
                               <button
-                                onClick={() => lessOfThisProduct(product._id)}
+                                onClick={() =>
+                                  lessOfThisProduct(
+                                    product._id,
+                                    productQuantity,
+                                    product.title
+                                  )
+                                }
                                 className="px-3 py-1 border border-slate-600 hover:bg-gray-300"
                               >
                                 -

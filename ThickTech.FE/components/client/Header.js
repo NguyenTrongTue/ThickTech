@@ -6,6 +6,7 @@ import ButtonOutline from "@/components/client/button/ButtonOutline";
 import Logo from "@/components/Logo";
 import { signOut } from "next-auth/react";
 import DropAcc from "@/components/client/DropAcc";
+import ButtonLink from "./button/ButtonLink";
 const Header = ({ session }) => {
   const { cartProducts } = useContext(CartContext);
   const inactiveLink = " text-gray-900 hover:text-red-500 ";
@@ -107,9 +108,15 @@ const Header = ({ session }) => {
               </div>
             )}
             {session?.isAdmin ? (
-              <Link href="/admin">
-                <ButtonOutline>Admin</ButtonOutline>
-              </Link>
+              <ButtonLink
+                href="/admin"
+                color="red"
+                className={
+                  "font-medium tracking-wide py-2 px-6 sm:px-6 border border-red-500 text-red-500 bg-white-500 outline-none rounded-3xl capitalize hover:bg-red-500 hover:text-white transition-all"
+                }
+              >
+                Admin
+              </ButtonLink>
             ) : null}
           </div>
 

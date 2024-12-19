@@ -86,16 +86,14 @@ export default function B() {
               className=""
             />
           </div>
-          <div>
-            <ButtonLink
-              href={"/admin/blogs/new"}
-              className={"whitespace-nowrap"}
-            >
+          <div className="flex items-center gap-2 flex-row">
+            <ButtonLink href={"/admin/blogs/new"} className={"px-8"}>
               Add Blog
             </ButtonLink>
             <ActionBtn
               onClick={exportToExcel}
-              className="ml-2 bg-gray-600 hover:bg-gray-800"
+              color={"slate"}
+              className={"outline-slate-400 border-slate-600"}
             >
               Export to Excel
             </ActionBtn>
@@ -183,11 +181,14 @@ export default function B() {
               pageRangeDisplayed={5}
               marginPagesDisplayed={2}
               onPageChange={handlePageChange}
+              previousLabel={"<"}
+              nextLabel={">"}
               containerClassName="pagination flex items-center justify-between"
-              pageClassName="page-itemborder mx-1 rounded hover:bg-gray-200"
-              pageLinkClassName="page-link text-blue-500"
-              previousClassName="previous-item border rounded hover:bg-gray-200"
-              nextClassName="next-item border rounded hover:bg-gray-200"
+              pageClassName="mx-1 rounded hover:bg-gray-200"
+              pageLinkClassName="page-link text-blue-500 p-2 rounded focus:outline-none bg-white"
+              activeLinkClassName="bg-slate-600 text-white"
+              previousClassName="previous-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
+              nextClassName="next-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
               disabledClassName="disabled text-gray-400"
             />
           </div>

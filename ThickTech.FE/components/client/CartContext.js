@@ -12,6 +12,8 @@ export function CartContextProvider({ children }) {
   useEffect(() => {
     if (cartProducts?.length > 0) {
       ls?.setItem("cart", JSON.stringify(cartProducts));
+    } else {
+      ls?.removeItem("cart"); // Xóa dữ liệu trong localStorage nếu giỏ hàng trống
     }
   }, [cartProducts]);
 
