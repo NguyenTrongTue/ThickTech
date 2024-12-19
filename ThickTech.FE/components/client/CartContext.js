@@ -12,8 +12,6 @@ export function CartContextProvider({ children }) {
   useEffect(() => {
     if (cartProducts?.length > 0) {
       ls?.setItem("cart", JSON.stringify(cartProducts));
-    } else {
-      ls?.removeItem("cart"); // Xóa dữ liệu trong localStorage nếu giỏ hàng trống
     }
   }, [cartProducts]);
 
@@ -52,10 +50,22 @@ export function CartContextProvider({ children }) {
     );
   }
   // Hàm xóa sản phẩm khỏi giỏ hàng
+  // Hàm xóa sản phẩm khỏi giỏ hàng
   function removeProduct(productId) {
-    setCartProducts((prev) =>
-      prev.filter((item) => item.productId !== productId)
-    );
+    setCartProducts((prev) => {
+      const updatedCart = prev.filter((item) => item.productId !== productId);
+
+      // Kiểm tra nếu giỏ hàng trống, xóa dữ liệu trong localStorage
+      if (updatedCart.length === 0) {
+        ls?.removeItem("cart");
+      } else {
+        // Lưu lại giỏ hàng vào localStorage nếu vẫn còn sản phẩm
+        ls?.setItem("cart", JSON.stringify(updatedCart));
+      }
+
+      // Cập nhật giỏ hàng trong state
+      return updatedCart;
+    });
   }
 
   // Hàm cập nhật số lượng sản phẩm

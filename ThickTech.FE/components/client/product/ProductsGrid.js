@@ -1,4 +1,4 @@
-import ProductBox from "@/components/client/ProductBox";
+import ProductBox from "@/components/client/product/ProductBox";
 
 export default function ProductsGrid({ products }) {
   return (

@@ -5,10 +5,7 @@ import FacebookIon from "@/public/assets/Icons/facebook.svg";
 import ZaloIcon from "@/public/assets/Icons/zalo.svg";
 import InstagramIcon from "@/public/assets/Icons/instagram.png";
 import Logo from "@/public/assets/logo.png";
-import Content from "@/public/content/text";
 const Footer = () => {
-  console.log(Content);
-
   const title = " là một cộng đồng yêu thích kĩ thuật và công nghệ thông tin.";
 
   return (

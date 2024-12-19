@@ -1,24 +1,18 @@
 import Head from "next/head";
-import ProductImages from "@/components/client/ProductImages";
-import ButtonLink from "@/components/client/button/ButtonLink";
-import ButtonCart from "@/components/client/button/ButtonCart";
+import ProductImages from "@/components/client/product/ProductImages";
+import ButtonLink from "@/components/button/ButtonLink";
+import ButtonCart from "@/components/button/ButtonCart";
 import { useContext, useState } from "react";
 import { CartContext } from "@/components/client/CartContext";
 import apiService from "@/services/api";
 import MainLayer from "@/components/client/MainLayer";
 import formatNumber from "@/utils/formatNumber";
 import Link from "next/link";
-import ProductDescription from "@/components/client/ProductDescription";
+import ProductDescription from "@/components/client/product/ProductDescription";
 
 export default function ProductPage({ product, meta }) {
   const { addProduct } = useContext(CartContext);
-  const [quantity, setQuantity] = useState(1);
 
-  const handleQuantityChange = (value) => {
-    if (value >= 1) {
-      setQuantity(value);
-    }
-  };
   return (
     <>
       <Head>
@@ -74,7 +68,7 @@ export default function ProductPage({ product, meta }) {
               <ButtonCart
                 type={"large"}
                 className={"w-1/2"}
-                onClick={() => addProduct(product._id, quantity)}
+                productId={product._id}
               >
                 Thêm vào giỏ hàng
               </ButtonCart>

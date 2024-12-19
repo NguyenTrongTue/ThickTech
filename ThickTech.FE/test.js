@@ -1,4 +1,4 @@
-import Button from "@/components/client/button/ButtonCart";
+import Button from "@/components/button/ButtonCart";
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 import { CartContext } from "@/components/client/CartContext";

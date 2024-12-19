@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MainLayer from "@/components/client/MainLayer";
-import NewProducts from "@/components/client/NewProducts";
+import NewProducts from "@/components/client/product/NewProducts";
 import apiService from "@/services/api";
 import Fuse from "fuse.js";
 

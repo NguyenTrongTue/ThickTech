@@ -1,5 +1,5 @@
-import ButtonCard from "@/components/client/button/ButtonCart";
-import ButtonLink from "@/components/client/button/ButtonLink";
+import ButtonCard from "@/components/button/ButtonCart";
+import ButtonLink from "@/components/button/ButtonLink";
 import Link from "next/link";
 import { useContext } from "react";
 import { CartContext } from "@/components/client/CartContext";
@@ -13,10 +13,8 @@ export default function ProductBox({
   images,
   isBestSeller,
 }) {
-  const { addProduct } = useContext(CartContext);
-
   const url = "/product/" + _id;
-  const urlByNow = "/order/" + _id;
+  const urlByNow = `/checkout?type=buynow&productId=${_id}`;
   return (
     <div className="sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 mt-4 hover:scale-[1.04] transform transition duration-500 ease-in-out">
       <div className="bg-white m-3 px-3 pt-3 shadow-courses rounded-2xl">

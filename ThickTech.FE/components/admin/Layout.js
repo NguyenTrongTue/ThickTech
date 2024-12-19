@@ -14,7 +14,8 @@ export default function Layout({ children }) {
     if (status === "loading") return; // Đợi trạng thái tải xong
 
     if (!session) {
-      router.push("/"); // Nếu không đăng nhập, quay về trang chủ
+      // Nếu chưa đăng nhập, chuyển đến trang not found
+      router.push("/404");
       return;
     }
 

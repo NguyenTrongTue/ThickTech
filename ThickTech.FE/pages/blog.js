@@ -1,6 +1,6 @@
 import Featured from "@/components/client/Featured";
 import MainLayer from "@/components/client/MainLayer";
-import NewProducts from "@/components/client/NewProducts";
+import NewProducts from "@/components/client/product/NewProducts";
 
 import apiService from "@/services/api";
 export default function HomePage({ featuredProduct, newProducts }) {

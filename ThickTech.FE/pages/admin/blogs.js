@@ -2,8 +2,8 @@ import Layout from "@/components/admin/Layout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api";
-import ButtonLink from "@/components/client/button/ButtonLink";
-import ActionBtn from "@/components/client/button/ActionBtn";
+import ButtonLink from "@/components/button/ButtonLink";
+import ActionBtn from "@/components/button/ActionBtn";
 import Input from "@/components/client/input/InputText";
 import ReactPaginate from "react-paginate"; // Import React Paginate
 import Fuse from "fuse.js"; // Import fuse.js

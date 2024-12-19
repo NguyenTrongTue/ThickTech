@@ -6,7 +6,7 @@ import apiService from "@/services/api";
 import Input from "@/components/client/input/InputText";
 import Notification from "@/components/Notification";
 import ContextForm from "@/components/admin/ContextForm";
-import ActionBtn from "../client/button/ActionBtn";
+import ActionBtn from "../button/ActionBtn";
 export default function BlogEditor({
   _id,
   author: existingAuthor,

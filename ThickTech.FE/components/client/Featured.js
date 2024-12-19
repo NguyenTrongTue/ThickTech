@@ -5,7 +5,7 @@ import Link from "next/link";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ProductBox from "@/components/client/ProductBox";
+import ProductBox from "@/components/client/product/ProductBox";
 export default function Featured({ product }) {
   // lấy 10 sản phẩm nổi bật từ product
   const productFeatured = product.slice(0, 5);
