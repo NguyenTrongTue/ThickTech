@@ -1,24 +1,24 @@
 import { createContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export const CartContext = createContext({});
 
 export function CartContextProvider({ children }) {
-  const ls = typeof window !== "undefined" ? window.localStorage : null;
-
-  // State lưu giỏ hàng: { productId, quantity }
+  // Lưu giỏ hàng vào cookie khi có thay đổi
   const [cartProducts, setCartProducts] = useState([]);
 
-  // Lưu giỏ hàng vào localStorage khi có thay đổi
+  // Lưu giỏ hàng vào cookie khi `cartProducts` thay đổi
   useEffect(() => {
     if (cartProducts?.length > 0) {
-      ls?.setItem("cart", JSON.stringify(cartProducts));
+      Cookies.set("cart", JSON.stringify(cartProducts), { expires: 7 }); // lưu cookie trong 7 ngày
     }
   }, [cartProducts]);
 
-  // Khôi phục giỏ hàng từ localStorage khi load trang
+  // Khôi phục giỏ hàng từ cookie khi load trang
   useEffect(() => {
-    if (ls && ls.getItem("cart")) {
-      setCartProducts(JSON.parse(ls.getItem("cart")));
+    const cartFromCookie = Cookies.get("cart");
+    if (cartFromCookie) {
+      setCartProducts(JSON.parse(cartFromCookie));
     }
   }, []);
 
@@ -39,7 +39,8 @@ export function CartContextProvider({ children }) {
       }
     });
   }
-  // hàm giảm số lượng sản phẩm
+
+  // Hàm giảm số lượng sản phẩm
   function decreaseProduct(productId) {
     setCartProducts((prev) =>
       prev.map((item) =>
@@ -49,18 +50,18 @@ export function CartContextProvider({ children }) {
       )
     );
   }
-  // Hàm xóa sản phẩm khỏi giỏ hàng
+
   // Hàm xóa sản phẩm khỏi giỏ hàng
   function removeProduct(productId) {
     setCartProducts((prev) => {
       const updatedCart = prev.filter((item) => item.productId !== productId);
 
-      // Kiểm tra nếu giỏ hàng trống, xóa dữ liệu trong localStorage
+      // Kiểm tra nếu giỏ hàng trống, xóa cookie
       if (updatedCart.length === 0) {
-        ls?.removeItem("cart");
+        Cookies.remove("cart");
       } else {
-        // Lưu lại giỏ hàng vào localStorage nếu vẫn còn sản phẩm
-        ls?.setItem("cart", JSON.stringify(updatedCart));
+        // Lưu lại giỏ hàng vào cookie nếu vẫn còn sản phẩm
+        Cookies.set("cart", JSON.stringify(updatedCart), { expires: 7 });
       }
 
       // Cập nhật giỏ hàng trong state
@@ -80,6 +81,7 @@ export function CartContextProvider({ children }) {
   // Hàm xóa toàn bộ giỏ hàng
   function clearCart() {
     setCartProducts([]);
+    Cookies.remove("cart"); // Xóa cookie khi giỏ hàng trống
   }
 
   return (

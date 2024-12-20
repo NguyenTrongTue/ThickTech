@@ -2,7 +2,6 @@ import Head from "next/head"; // Import Head
 import Featured from "@/components/client/Featured";
 import MainLayer from "@/components/client/MainLayer";
 import apiService from "@/services/api";
-import { Toaster } from "react-hot-toast"; // Import Toaster
 export default function HomePage({ featuredProduct, meta }) {
   return (
     <MainLayer>
