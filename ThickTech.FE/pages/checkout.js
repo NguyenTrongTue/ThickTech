@@ -90,8 +90,7 @@ export default function CheckoutPage() {
 
   return (
     <MainLayer>
-      <div className="p-4 bg-white rounded-lg shadow-md">
-        {" "}
+      <div className="p-4 bg-white rounded-lg shadow-lg">
         <Checkout productList={productList} />
       </div>
     </MainLayer>

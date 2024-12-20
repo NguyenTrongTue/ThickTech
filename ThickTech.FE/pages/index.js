@@ -1,24 +1,22 @@
-import Head from "next/head"; // Import Head
 import Featured from "@/components/client/Featured";
 import MainLayer from "@/components/client/MainLayer";
 import apiService from "@/services/api";
+import SeoHead from "@/components/SeoHead";
 export default function HomePage({ featuredProduct, meta }) {
   return (
     <MainLayer>
-      {/* Meta Tags */}
-      <Head>
-        <title>{meta?.title}</title>
-        <meta name="description" content={meta?.description} />
-        <meta property="og:title" content={meta?.title} />
-        <meta property="og:description" content={meta?.description} />
-        <meta property="og:image" content={meta?.image} />
-        <meta property="og:url" content="https://yourwebsite.com/" />
-        {/* Optional: Other meta tags for SEO */}
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
-      {/* Hiển thị thông báo */}
-      {/* Nội dung chính */}
+      <SeoHead
+        title={meta.title}
+        siteName={meta.siteName}
+        description={meta.description}
+        url={meta.url}
+        type={meta.type}
+        robots={meta.robots}
+        image={meta.image}
+        date={meta.date}
+        author={meta.author}
+        templateTitle={meta.templateTitle}
+      />
       <Featured product={featuredProduct} />
     </MainLayer>
   );
