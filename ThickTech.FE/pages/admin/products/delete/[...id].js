@@ -7,7 +7,6 @@ export default function DeleteProductPage() {
   const router = useRouter();
   const [productInfo, setProductInfo] = useState();
   const { id } = router.query;
-
   useEffect(() => {
     if (!id) {
       return;
@@ -23,6 +22,8 @@ export default function DeleteProductPage() {
 
   async function deleteProduct() {
     await apiService.delete("/api/products/" + id);
+    toast.susset("Deleting product...");
+
     goBack();
   }
 

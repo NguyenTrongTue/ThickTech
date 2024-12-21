@@ -83,7 +83,7 @@ export default function AdminLayout({ children }) {
       {/* Main content */}
       <section className="flex-1 flex flex-col min-h-screen overflow-hidden">
         <Toaster position="top-center" reverseOrder={false} />
-        <Header toggleSidebar={toggleSidebar} />
+        <Header toggleSidebar={toggleSidebar} session={session} />
         <section className="pt-16 mt-2 flex-1 px-4 mb-4">{children}</section>
       </section>
     </div>

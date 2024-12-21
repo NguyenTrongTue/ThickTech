@@ -7,6 +7,7 @@ import Logo from "@/components/Logo";
 import { signOut } from "next-auth/react";
 import DropAcc from "@/components/client/DropAcc";
 import ButtonLink from "../button/ButtonLink";
+import { Earth, EarthIcon, HomeIcon } from "lucide-react";
 const Header = ({ session }) => {
   const { cartProducts } = useContext(CartContext);
   const inactiveLink = " text-gray-900 hover:text-red-500 ";
@@ -48,7 +49,7 @@ const Header = ({ session }) => {
           "sticky lg:fixed top-0 w-full z-30 bg-white transition-all rounded duration-300 ease-in-out shadow-lg"
         }
       >
-        <nav className="max-w-screen-xl px-0 sm:px-4 lg:px-16 mx-auto flex justify-between py-2 lg:py-2">
+        <nav className="container px-0 sm:px-4 mx-auto flex justify-between py-2 lg:py-2 lg:px-4 xl:px-8">
           <div className="flex items-center">
             <Logo />
           </div>
@@ -127,30 +128,15 @@ const Header = ({ session }) => {
 
       <nav className="fixed lg:hidden bottom-0 left-0 right-0 z-20 px-4 sm:px-8 shadow-t width-full bg-white">
         <div className="sm:px-3">
-          <ul className="flex w-full justify-between items-center text-black-500">
+          <ul className="flex w-full justify-between items-center ">
             <Link
               href="/"
               className={
-                "mx-1 sm:mx-2 px-3 sm:px-4 py-2 flex flex-col items-center text-xs border-t-2 transition-all" +
-                +(pathname === "/"
-                  ? activeLink + "border-red-500"
-                  : inactiveLink)
+                "mx-1 sm:mx-2 px-3 sm:px-4 py-2 flex flex-col items-center text-xs border-t-2 transition-all " +
+                (pathname === "/" ? activeLink : inactiveLink)
               }
             >
-              <svg
-                className="w-6 h-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                />
-              </svg>
+              <HomeIcon size={24} />
               Home
             </Link>
             <Link
@@ -162,20 +148,7 @@ const Header = ({ session }) => {
                   : inactiveLink)
               }
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                />
-              </svg>
+              <EarthIcon size={24} />
               Club
             </Link>
             <Link

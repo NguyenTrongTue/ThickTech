@@ -7,8 +7,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ProductBox from "@/components/client/product/ProductBox";
 export default function Featured({ product }) {
-  // lấy 10 sản phẩm nổi bật từ product
-  const productFeatured = product.slice(0, 5);
+  // lấy sản phẩm có is_featured = true
+  const productFeatured = product.filter((item) => item.is_featured == "true");
   const SideSettings = {
     dots: true,
     infinite: true,
@@ -17,7 +17,7 @@ export default function Featured({ product }) {
     arrows: false,
     autoplay: true,
     arrows: false,
-    speed: 500,
+    speed: 1000,
     autoplaySpeed: 2000,
     pauseOnHover: true,
     cssEase: "linear",
@@ -28,10 +28,19 @@ export default function Featured({ product }) {
           slidesToShow: 3,
           slidesToScroll: 1,
           infinite: true,
+          dots: true,
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 500,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,

@@ -2,17 +2,15 @@ import Head from "next/head";
 import ProductImages from "@/components/client/product/ProductImages";
 import ButtonLink from "@/components/button/ButtonLink";
 import ButtonCart from "@/components/button/ButtonCart";
-import { useContext, useState } from "react";
-import { CartContext } from "@/components/client/CartContext";
+
 import apiService from "@/services/api";
 import MainLayer from "@/components/client/MainLayer";
 import formatNumber from "@/utils/formatNumber";
 import Link from "next/link";
+import NewProducts from "@/components/client/product/NewProducts";
 import ProductDescription from "@/components/client/product/ProductDescription";
 
-export default function ProductPage({ product, meta }) {
-  const { addProduct } = useContext(CartContext);
-
+export default function ProductPage({ product, meta, categoryProducts }) {
   return (
     <>
       <Head>
@@ -27,12 +25,10 @@ export default function ProductPage({ product, meta }) {
         />
       </Head>
       <MainLayer>
-        <div className="w-full flex flex-col lg:flex-row gap-4 lg:px-10 xl:px-10 md:px-10">
-          {/* Hình ảnh sản phẩm */}
+        <div className="w-full lg:w-full md:w-full xl:w-full bg-white rounded-lg shadow-md p-6 mt-6 flex flex-col lg:flex-row gap-4">
           <div className="bg-white rounded-lg shadow-md w-full lg:w-1/2 md:w-full xl:w-1/2">
             <ProductImages images={product.images} />
           </div>
-
           {/* Thông tin sản phẩm */}
           <div className="w-full lg:w-1/2 bg-white rounded-lg shadow-md p-6">
             <h1 className="text-xl font-bold line-clamp-2">{product.title}</h1>
@@ -75,6 +71,10 @@ export default function ProductPage({ product, meta }) {
             </div>
           </div>
         </div>
+        <div className="w-full lg:w-full md:w-full xl:w-full bg-white rounded-lg shadow-md p-6 mt-6">
+          <h2 className="text-lg  text-gray-800 mb-4">Sản phẩm liên quan</h2>
+          <NewProducts products={categoryProducts} />
+        </div>
       </MainLayer>
     </>
   );
@@ -85,7 +85,13 @@ export async function getServerSideProps(context) {
 
   try {
     const response = await apiService.get(`/api/products/${id}`);
+
     const product = response;
+    const categoryProductsResponse = await apiService.get(
+      `/api/products/category/${product.product_category}`
+    );
+    const categoryProducts = categoryProductsResponse;
+
     const meta = {
       title: product?.title || "Sản phẩm",
       description: product?.description || "Mô tả sản phẩm",
@@ -94,6 +100,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         product,
+        categoryProducts,
         meta,
       },
     };
