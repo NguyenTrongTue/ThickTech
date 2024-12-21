@@ -120,3 +120,28 @@ table.basic a {
   color: #aaa;
   pointer-events: none;
 }
+
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  gap: 8px;
+}
+
+.page, .prev, .next, .break {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.active {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.prev, .next {
+  font-weight: bold;
+}
