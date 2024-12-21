@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { CartContext } from "@/components/client/CartContext";
-import ActionBtn from "../button/ActionBtn";
+import ActionBtn from "../button/Button";
 import { useEffect } from "react";
 export default function Checkout() {
   const [paymentMode, setPaymentMode] = useState("prepaid");

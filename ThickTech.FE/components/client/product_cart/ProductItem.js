@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import Button from "@/components/button/ActionBtn";
+import ActionBtn from "@/components/button/ActionBtn";
 import formatNumber from "@/utils/formatNumber";
 
 export default function ProductItem({
@@ -11,7 +11,7 @@ export default function ProductItem({
   openModal,
 }) {
   return (
-    <div className="bg-white flex flex-row border-2 border-slate-400 rounded-md p-3 justify-between">
+    <div className="bg-white flex flex-row border-2 border-slate-400 rounded-md p-3 justify-between gap-2">
       <div className="flex items-start flex-row gap-3">
         <Link href={`/product/${product._id}`} className="flex items-center">
           <div className="min-w-[6rem] max-w-[6rem] min-h-[6rem] max-h-[6rem] h-[6rem] w-[6rem] rounded-lg flex justify-center items-center">
@@ -68,12 +68,13 @@ export default function ProductItem({
         </div>
       </div>
       <div className="text-center">
-        <Button
+        <ActionBtn
           onClick={() => openModal(product._id, product.title)}
           color={"red"}
+          className={"outline-double outline-red-400 border-red-600"}
         >
           Xóa
-        </Button>
+        </ActionBtn>
       </div>
     </div>
   );

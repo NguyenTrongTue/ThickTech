@@ -1,5 +1,5 @@
 import BlogForm from "@/components/admin/BlogForm";
-import Layout from "@/components/admin/Layout";
+import Layout from "@/components/admin/AdminLayout";
 
 export default function NewProduct() {
   return (

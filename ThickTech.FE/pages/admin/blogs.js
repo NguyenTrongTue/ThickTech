@@ -1,10 +1,10 @@
-import Layout from "@/components/admin/Layout";
+import Layout from "@/components/admin/AdminLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api";
 import ButtonLink from "@/components/button/ButtonLink";
-import ActionBtn from "@/components/button/ActionBtn";
-import Input from "@/components/client/input/InputText";
+import ActionBtn from "@/components/button/Button";
+import Input from "@/components/input/Input";
 import ReactPaginate from "react-paginate"; // Import React Paginate
 import Fuse from "fuse.js"; // Import fuse.js
 import * as XLSX from "xlsx"; // Import thư viện xlsx

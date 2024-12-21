@@ -14,7 +14,7 @@ export default function ConfirmModal({
       onClose={onClose}
       onConfirm={onConfirm}
       message={message}
-      item_title={itemTitle}
+      itemTitle={itemTitle}
     />
   );
 }

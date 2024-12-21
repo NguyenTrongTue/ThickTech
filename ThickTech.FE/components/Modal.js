@@ -1,11 +1,9 @@
-import { useState } from "react";
-
 export default function ModalConfirm({
   isOpen,
   onClose,
   onConfirm,
   message,
-  item_title,
+  itemTitle,
 }) {
   if (!isOpen) return null;
 
@@ -18,7 +16,7 @@ export default function ModalConfirm({
           </h2>
         </div>
         <div className="p-4">
-          <p className="text-gray-600">{item_title || null}</p>
+          <p className="text-gray-600">{itemTitle}</p>
         </div>
         <div className="flex justify-end items-center gap-4 p-4 border-t border-gray-300">
           <button

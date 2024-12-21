@@ -1,4 +1,4 @@
-import Layout from "@/components/admin/Layout";
+import Layout from "@/components/admin/AdminLayout";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api";

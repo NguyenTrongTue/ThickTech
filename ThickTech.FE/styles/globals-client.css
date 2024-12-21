@@ -85,7 +85,7 @@ hr {
   transform: translateY(-8px);
 }
 
-.footer-icons:hover>.sepiaa {
+.footer-icons:hover > .sepiaa {
   filter: invert(100.1);
 }
 
@@ -166,21 +166,6 @@ hr {
   border-right-color: transparent;
 }
 
-/* slick-dots tùy chỉnh */
-
-
-/* .slick-dots li {
-  width: 1.5rem;
-  height: 1.5rem;
-} */
-
-
-
-
-
-
-
-
 .slick-prev,
 .slick-next {
   z-index: 10;
@@ -204,4 +189,13 @@ hr {
 
 .slick-next {
   right: -30px;
+}
+
+.page-link {
+  color: #1a21bc;
+}
+.active_link {
+  color: white;
+  background-color: #1a21bc;
+  border-color: #1a21bc;
 }

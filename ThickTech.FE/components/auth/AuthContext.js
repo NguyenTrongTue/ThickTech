@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie"; // Import js-cookie để làm việc với cookies
-
+import { useSession } from "next-auth/react"; // Import hook useSession từ next-auth/react
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // Lưu thông tin user
+  const { data: session, status } = useSession();
+  const [user, setUser] = useState(session || null);
 
   useEffect(() => {
     try {

@@ -3,10 +3,10 @@ import "react-quill/dist/quill.snow.css"; // Giao diện mặc định
 import { useRouter } from "next/router";
 import { ReactSortable } from "react-sortablejs";
 import apiService from "@/services/api";
-import Input from "@/components/client/input/InputText";
+import Input from "@/components/input/Input";
 import Notification from "@/components/Notification";
-import ContextForm from "@/components/admin/ContextForm";
-import ActionBtn from "../button/ActionBtn";
+import ContextForm from "@/components/admin/Description";
+import ActionBtn from "../button/Button";
 export default function BlogEditor({
   _id,
   author: existingAuthor,
