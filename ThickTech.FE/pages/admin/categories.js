@@ -190,7 +190,7 @@ export default function Categories() {
                       isDisabled={isModalOpen}
                       isIconOnly
                       size="sm"
-                      className="mr-2 border rounded bg-blue-200 text-blue-600 hover:bg-blue-400 hover:text-white"
+                      className="p-2 mr-2 border rounded bg-blue-200 text-blue-600 hover:bg-blue-400 hover:text-white"
                     >
                       <Edit2 size={13} />
                     </Button>
@@ -199,7 +199,7 @@ export default function Categories() {
                       isLoading={isDeleting}
                       isDisabled={isDeleting}
                       isIconOnly
-                      className="border rounded bg-red-200 text-red-600 hover:bg-red-400 hover:text-white"
+                      className="p-2 border rounded bg-red-200 text-red-600 hover:bg-red-400 hover:text-white"
                       size="sm"
                       color="danger"
                     >

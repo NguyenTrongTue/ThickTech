@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { Menu, UserCircleIcon } from "lucide-react";
 
 export default function Header({ toggleSidebar, session }) {
   return (
@@ -11,11 +11,7 @@ export default function Header({ toggleSidebar, session }) {
       <div className="w-full flex justify-between items-center pr-0 md:pr-[260px]">
         <h1 className="text-xl font-semibold"></h1>
         <div className="flex items-center gap-2">
-          <img
-            src={session?.user.image}
-            alt="User Avatar"
-            className="w-8 h-8 rounded-full object-cover"
-          />
+          <UserCircleIcon />
           <span className="text-gray-800 font-medium text-sm hidden md:block lg:block xl:block">
             {session?.user.name}
           </span>

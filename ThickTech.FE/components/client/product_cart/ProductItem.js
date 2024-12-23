@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import ActionBtn from "@/components/button/ActionBtn";
-import formatNumber from "@/utils/formatNumber";
+import FormatNumber from "@/utils/formatNumber";
+import { TrashIcon } from "lucide-react";
 
 export default function ProductItem({
   product,
@@ -38,16 +39,16 @@ export default function ProductItem({
           </Link>
           <div>
             <span className="ml-4 text-sm font-medium text-gray-500 line-through">
-              {formatNumber(product.original_price)}đ
+              <FormatNumber number={product.original_price} />
             </span>
             <span className="ml-3 text-md font-medium text-red-700">
-              {formatNumber(product.selling_price)}đ
+              <FormatNumber number={product.selling_price} />
             </span>
           </div>
           <div className="ml-4 mt-2 flex items-center">
             <button
               onClick={() => lessOfThisProduct(product._id)}
-              className="px-3 py-1 border border-slate-600 hover:bg-gray-300"
+              className="p-1 px-3 border border-slate-600 hover:bg-gray-300"
               disabled={quantity === 1}
               style={{
                 opacity: quantity === 1 ? 0.2 : 1,
@@ -55,12 +56,12 @@ export default function ProductItem({
             >
               -
             </button>
-            <span className="text-center border-t border-b border-gray-300 py-1 w-12">
+            <span className="text-center border-t border-b border-gray-300 p-1 px-3">
               {quantity}
             </span>
             <button
               onClick={() => moreOfThisProduct(product._id)}
-              className="px-3 py-1 border border-slate-600 hover:bg-gray-300"
+              className="p-1 px-3 border border-slate-600 hover:bg-gray-300"
             >
               +
             </button>
@@ -70,10 +71,11 @@ export default function ProductItem({
       <div className="text-center">
         <ActionBtn
           onClick={() => openModal(product._id, product.title)}
-          color={"red"}
-          className={"outline-double outline-red-400 border-red-600"}
+          className={
+            "outline-double outline-gray-400 border-gray-600 p-2 text-gray-600  hover:bg-slate-500 hover:text-white"
+          }
         >
-          Xóa
+          <TrashIcon className="w-5 h-5" />
         </ActionBtn>
       </div>
     </div>

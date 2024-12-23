@@ -91,34 +91,46 @@ export default function CartPage() {
               className="w-1/4 mx-auto"
             />
             Giỏ hàng của bạn đang trống.
+            <div className="mt-6 w-1/5 mx-auto">
+              <ButtonLink
+                href="/products"
+                color="blue"
+                className="px-4 outline-blue-400"
+              >
+                Tiếp tục mua sắm
+              </ButtonLink>
+            </div>
           </div>
         )}
 
         {cartProducts.length > 0 && (
-          <ProductList
-            products={products}
-            cartProducts={cartProducts}
-            lessOfThisProduct={lessOfThisProduct}
-            moreOfThisProduct={moreOfThisProduct}
-            openModal={openModal}
-          />
+          <>
+            <ProductList
+              products={products}
+              cartProducts={cartProducts}
+              lessOfThisProduct={lessOfThisProduct}
+              moreOfThisProduct={moreOfThisProduct}
+              openModal={openModal}
+            />
+
+            <div className="flex justify-between mt-6">
+              <ButtonLink
+                href="/products"
+                color="blue"
+                className="px-4 outline-blue-400"
+              >
+                Tiếp tục mua sắm
+              </ButtonLink>
+              <ButtonLink
+                href="/cart/checkout?type=cart"
+                color="red"
+                className="px-10 outline-double outline-red-400 border-red-600"
+              >
+                Đặt hàng
+              </ButtonLink>
+            </div>
+          </>
         )}
-        <div className="flex justify-between mt-6">
-          <ButtonLink
-            href="/products"
-            color="blue"
-            className="px-4 outline-blue-400"
-          >
-            Tiếp tục mua sắm
-          </ButtonLink>
-          <ButtonLink
-            href="/checkout?type=cart"
-            color="red"
-            className="px-10 outline-double outline-red-400 border-red-600"
-          >
-            Đặt hàng
-          </ButtonLink>
-        </div>
       </div>
     </MainLayer>
   );

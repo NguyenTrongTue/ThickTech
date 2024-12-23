@@ -2,12 +2,13 @@ export default function InputTextArea({
   children,
   className,
   label,
+  isRequired = true,
   ...props
 }) {
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label} <span className="text-red-500">*</span>{" "}
+        {label} {isRequired ? <span className="text-red-500">*</span> : ""}
       </label>
       <textarea
         {...props}

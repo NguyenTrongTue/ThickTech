@@ -7,7 +7,17 @@ import Logo from "@/components/Logo";
 import { signOut } from "next-auth/react";
 import DropAcc from "@/components/client/DropAcc";
 import ButtonLink from "../button/ButtonLink";
-import { Earth, EarthIcon, HomeIcon } from "lucide-react";
+
+import {
+  Car,
+  Earth,
+  EarthIcon,
+  HomeIcon,
+  ListChecks,
+  LucideEarth,
+} from "lucide-react";
+import { ListAltOutlined, ListAltRounded } from "@mui/icons-material";
+
 const Header = ({ session }) => {
   const { cartProducts } = useContext(CartContext);
   const inactiveLink = " text-gray-900 hover:text-red-500 ";
@@ -68,29 +78,36 @@ const Header = ({ session }) => {
               </li>
             ))}
           </ul>
-          <Link
-            href="/cart"
-            className={
-              "xl:hidden xxl:hidden lg:hidden px-3 sm:px-4 py-2 flex items-center text-xs transition-all" +
-              (pathname === "/cart" ? activeLink : inactiveLink)
-            }
-          >
-            <svg
-              className="w-8 h-8"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-              />
-            </svg>
-          </Link>
+
           <div className="font-medium flex justify-center items-center gap-4">
+            <Link
+              title="Đơn hàng"
+              href="/cart/order-search"
+              className={
+                "p-2 flex items-center text-xs transition-all bg-white rounded-full shadow-md border-4 border-red-200 text-red-500 hover:bg-red-500 hover:text-white transition-100"
+              }
+            >
+              <ListChecks size={24} />
+            </Link>
+            <Link
+              href="/cart"
+              className={
+                "xl:hidden xxl:hidden lg:hidden p-2 flex items-center text-xs transition-all bg-white rounded-full shadow-md border-4 border-red-200 text-red-500 hover:bg-red-500 hover:text-white transition-100"
+              }
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
             {session?.user ? (
               <div>
                 <DropAcc />
@@ -99,11 +116,11 @@ const Header = ({ session }) => {
               <>
                 <Link
                   href="/auth/register"
-                  className="text-black-600 sm:hidden hidden lg:block md:block capitalize tracking-wide hover:text-red-500 transition-all"
+                  className="text-black-600 hidden xl:inline-block capitalize tracking-wide hover:text-red-500 transition-all"
                 >
                   Đăng ký
                 </Link>
-                <Link href="/auth/login">
+                <Link href="/auth/signin">
                   <ButtonOutline>Đăng nhập</ButtonOutline>
                 </Link>
               </>
@@ -148,7 +165,7 @@ const Header = ({ session }) => {
                   : inactiveLink)
               }
             >
-              <EarthIcon size={24} />
+              <LucideEarth size={24} />
               Club
             </Link>
             <Link

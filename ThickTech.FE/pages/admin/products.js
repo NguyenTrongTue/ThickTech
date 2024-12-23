@@ -1,6 +1,7 @@
 import Layout from "@/components/admin/AdminLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import apiService from "@/services/api";
 import ButtonLink from "@/components/button/ButtonLink";
 import ActionBtn from "@/components/button/Button";
@@ -17,7 +18,7 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState(""); // Search term
   const [currentPage, setCurrentPage] = useState(0); // Current page
   const [itemsPerPage, setItemsPerPage] = useState(10); // Items per page
-
+  const router = useRouter();
   useEffect(() => {
     // Fetch products
     apiService.get("/api/products").then((response) => {
@@ -140,7 +141,7 @@ export default function Products() {
                   </td>
                   <td className="text-center hidden lg:table-cell">
                     <span
-                      className={`p-2 text-[12px] rounded-md ${
+                      className={`p-1 text-[12px] rounded-md ${
                         product.is_featured == "true"
                           ? "text-green-600 bg-green-200"
                           : "text-red-600 bg-red-200"
@@ -153,21 +154,23 @@ export default function Products() {
                     <Button
                       isIconOnly
                       size="sm"
-                      className="mr-2 border rounded bg-blue-200 text-blue-600 hover:bg-blue-400 hover:text-white"
+                      onClick={() =>
+                        router.push("/admin/products/edit/" + product._id)
+                      }
+                      className="p-2 mr-2 border rounded bg-blue-200 text-blue-600 hover:bg-blue-400 hover:text-white"
                     >
-                      <Link href={"/admin/products/edit/" + product._id}>
-                        <Edit2 size={13} />
-                      </Link>
+                      <Edit2 size={13} />
                     </Button>
                     <Button
                       isIconOnly
-                      className="border rounded bg-red-200 text-red-600 hover:bg-red-400 hover:text-white"
+                      onClick={() =>
+                        router.push("/admin/products/delete/" + product._id)
+                      }
+                      className="p-2 border rounded bg-red-200 text-red-600 hover:bg-red-400 hover:text-white"
                       size="sm"
                       color="danger"
                     >
-                      <Link href={"/admin/products/delete/" + product._id}>
-                        <Trash2 size={13} />
-                      </Link>
+                      <Trash2 size={13} />
                     </Button>
                   </td>
                 </tr>

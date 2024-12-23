@@ -3,7 +3,7 @@ import ButtonLink from "@/components/button/ButtonLink";
 import Link from "next/link";
 import { useContext } from "react";
 
-import formatNumber from "@/utils/formatNumber";
+import FormatNumber from "@/utils/formatNumber";
 export default function ProductBox({
   _id,
   title,
@@ -49,8 +49,8 @@ export default function ProductBox({
           </Link>
 
           <div className="flex items-center py-3 text-center justify-center">
-            <h3 className="text-xl font-medium text-red-600">
-              {formatNumber(Number(selling_price))}đ
+            <h3 className="text-lg font-medium text-red-600">
+              <FormatNumber number={selling_price} />
             </h3>
           </div>
 

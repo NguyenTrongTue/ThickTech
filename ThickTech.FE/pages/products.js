@@ -114,7 +114,6 @@ export async function getServerSideProps() {
     const categoriesResponse = await apiService.get("/api/categories");
     const newProducts = newProductsResponse;
     const categories = categoriesResponse;
-    console.log("newProducts", newProducts, "categories", categories);
 
     return {
       props: {
