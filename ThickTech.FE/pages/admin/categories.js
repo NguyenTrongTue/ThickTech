@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import apiService from "@/services/api";
 import { Edit2, Trash2 } from "lucide-react";
 import Input from "@/components/input/Input";
-import ReactPaginate from "react-paginate"; // Import React Paginate
 import Fuse from "fuse.js"; // Import fuse.js
 import ButtonCustom from "@/components/button/Button";
 import { Button } from "@nextui-org/react";
-import CategoryForm from "@/components/admin/CategoryForm";
+import CategoryForm from "@/components/admin/product/CategoryForm";
 import ConfirmModal from "@/components/Modal";
 import { toast } from "react-hot-toast";
+import Pagination from "@/components/admin/Pagination";
+import { Tooltip, TextField } from "@mui/material";
 export default function Categories() {
   const [categories, setCategories] = useState([]); // All categories
   const [filteredCategories, setFilteredCategories] = useState([]);
@@ -140,14 +141,16 @@ export default function Categories() {
       <div className="space-y-4 p-4 bg-white rounded-lg shadow-md flex flex-col min-h-full">
         <div className="flex justify-between align-center text-center flex-wrap h-full ">
           <div className="w-full lg:w-1/3 md:w-1/2 xl:w-1/4 mb-2">
-            <Input
+            <TextField
+              label="Search"
+              variant="outlined"
+              size="small"
               type="search"
-              name="search"
-              label="Tìm kiếm"
+              color="primary"
               value={searchTerm}
-              placeholder="Search categories"
               onChange={handleSearch}
-              className=""
+              fullWidth
+              sx={{ flex: "1 1 auto", maxWidth: 300 }}
             />
           </div>
           <ButtonCustom onClick={() => openModal()} className="px-4">
@@ -160,7 +163,6 @@ export default function Categories() {
               <tr>
                 <td className="text-center hidden lg:table-cell">No.</td>
                 <td>Category name</td>
-                <td>Category slug</td>
 
                 <td className="text-center whitespace-nowrap">Action</td>
               </tr>
@@ -171,18 +173,16 @@ export default function Categories() {
                   <td className="text-center hidden lg:table-cell">
                     {index + 1}
                   </td>
-                  <td
-                    className="max-w-[200px] lg:max-w-[300px] md:max-w-[200px] overflow-hidden overflow-ellipsis whitespace-nowrap"
-                    title={item.category_name}
-                  >
-                    {item.category_name}
+                  <td>
+                    {item.category_name && item.category_name.length > 50 ? (
+                      <Tooltip title={item.category_name}>
+                        <span>{`${item.category_name.slice(0, 50)}...`}</span>
+                      </Tooltip>
+                    ) : (
+                      <span>{item.category_name}</span>
+                    )}
                   </td>
-                  <td
-                    className="max-w-[200px] lg:max-w-[300px] md:max-w-[200px] overflow-hidden overflow-ellipsis whitespace-nowrap"
-                    title={item.category_slug}
-                  >
-                    {item.category_slug}
-                  </td>
+
                   <td className="text-center">
                     <Button
                       onClick={() => openModal(item)}
@@ -211,40 +211,13 @@ export default function Categories() {
             </tbody>
           </table>
         </div>
-        <div className="flex items-center justify-between bg-slate-400 p-2">
-          <div className="text-center">
-            Showing {startIndex + 1}-
-            {Math.min(endIndex, filteredCategories.length)} of{" "}
-            {filteredCategories.length} products
-          </div>
-          <div className="text-center flex items-center whitespace-nowrap gap-2">
-            Select page:
-            <select
-              value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-              className="px-2 py-1 border rounded"
-            >
-              <option value={10}>10</option>
-              <option value={30}>30</option>
-              <option value={45}>45</option>
-            </select>
-            <ReactPaginate
-              pageCount={Math.ceil(filteredCategories.length / itemsPerPage)}
-              pageRangeDisplayed={5}
-              marginPagesDisplayed={2}
-              onPageChange={handlePageChange}
-              previousLabel={"<"}
-              nextLabel={">"}
-              containerClassName="pagination flex items-center justify-between"
-              pageClassName="mx-1 rounded hover:bg-gray-200"
-              pageLinkClassName="page-link text-red-600 p-2 rounded focus:outline-none bg-white"
-              activeLinkClassName="active_link bg-slate-600 text-white"
-              previousClassName="previous-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
-              nextClassName="next-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
-              disabledClassName="disabled text-gray-400"
-            />
-          </div>
-        </div>
+        <Pagination // Thêm component Pagination
+          totalItems={filteredCategories.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={(value) => setItemsPerPage(value)}
+        />
       </div>
     </Layout>
   );

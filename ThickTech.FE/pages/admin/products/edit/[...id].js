@@ -1,7 +1,7 @@
 import Layout from "@/components/admin/AdminLayout";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import ProductForm from "@/components/admin/ProductForm";
+import ProductForm from "@/components/admin/product/ProductForm";
 import apiService from "@/services/api";
 import Spinner from "@/components/Spinner";
 export default function EditProductPage() {

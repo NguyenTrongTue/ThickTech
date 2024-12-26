@@ -10,10 +10,10 @@ const defaultMeta = {
   url: "https://MyWebsite.com",
   type: "website",
   robots: "follow, index",
-  // change with url of your image (recommended dimension = 1.91:1)
+
   // used in twitter, facebook, etc. card when link copied in tweet/status
   image: "https://MyWebsite.com/assets/card-image.png",
-  author: "Lorem Ipsum",
+  author: "Thick-Tech VN",
 };
 
 /**

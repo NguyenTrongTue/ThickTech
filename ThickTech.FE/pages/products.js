@@ -3,11 +3,21 @@ import MainLayer from "@/components/client/MainLayer";
 import NewProducts from "@/components/client/product/NewProducts";
 import apiService from "@/services/api";
 import Fuse from "fuse.js";
-import toast from "react-hot-toast";
+import { getAllProducts, getAllCategories } from "@/api/product";
 
-export default function HomePage({ categories, newProducts }) {
+export async function getStaticProps() {
+  const products = await getAllProducts();
+  const categories = await getAllCategories();
+  return {
+    props: {
+      products,
+      categories,
+    },
+  };
+}
+export default function Products({ categories, products }) {
   const [searchQuery, setSearchQuery] = useState(""); // Từ khóa tìm kiếm
-  const [filteredProducts, setFilteredProducts] = useState(newProducts);
+  const [filteredProducts, setFilteredProducts] = useState(products);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   // Hàm xử lý tìm kiếm khi nhấn Enter
@@ -22,11 +32,11 @@ export default function HomePage({ categories, newProducts }) {
           threshold: 0.3,
           keys: ["title"],
         };
-        const fuse = new Fuse(newProducts, options);
+        const fuse = new Fuse(products, options);
         const results = fuse.search(query).map((result) => result.item);
         setFilteredProducts(results);
       } else {
-        setFilteredProducts(newProducts); // Hiển thị tất cả nếu không có từ khóa
+        setFilteredProducts(products); // Hiển thị tất cả nếu không có từ khóa
       }
     }
   };
@@ -40,16 +50,19 @@ export default function HomePage({ categories, newProducts }) {
 
     // Lọc theo danh mục
     if (updatedCategories.length > 0) {
-      const filteredByCategory = newProducts.filter((product) =>
+      const filteredByCategory = products.filter((product) =>
         updatedCategories.includes(product.product_category)
       );
       setFilteredProducts(filteredByCategory);
     } else {
-      setFilteredProducts(newProducts); // Hiển thị tất cả nếu không chọn danh mục nào
+      setFilteredProducts(products); // Hiển thị tất cả nếu không chọn danh mục nào
     }
   };
   return (
-    <MainLayer>
+    <MainLayer
+      title="Products - ThickTech"
+      description="Các sản phẩm phục vụ việc học tập liên quan đến kĩ thuật và công nghệ"
+    >
       <div className="flex flex-col lg:flex-row gap-6 bg-white p-4 rounded-md shadow-md">
         {/* Sidebar Bộ Lọc */}
         <aside className="w-full lg:w-1/4 p-4 bg-gray-100 rounded-md shadow-md">
@@ -106,28 +119,4 @@ export default function HomePage({ categories, newProducts }) {
       </div>
     </MainLayer>
   );
-}
-
-export async function getServerSideProps() {
-  try {
-    const newProductsResponse = await apiService.get("/api/products");
-    const categoriesResponse = await apiService.get("/api/categories");
-    const newProducts = newProductsResponse;
-    const categories = categoriesResponse;
-
-    return {
-      props: {
-        categories,
-        newProducts,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return {
-      props: {
-        categories: [],
-        newProducts: [],
-      },
-    };
-  }
 }

@@ -47,8 +47,8 @@ export default function Sidebar() {
       icon: <User className="h-5 w-5" />,
     },
     {
-      name: "Reviews",
-      link: "/admin/reviews",
+      name: "Ideas",
+      link: "/admin/ideas",
       icon: <Star className="h-5 w-5" />,
     },
     {

@@ -6,9 +6,9 @@ const modules = {
     [{ header: [1, 2, false] }],
     ["bold", "italic", "underline", "strike", "blockquote"],
     [{ size: ["extra-small", "small", "medium", "large"] }],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["link"],
+    [{ list: "ordered" }, { list: "bullet" }, { align: [] }],
     [{ color: [] }, { background: [] }],
+    [{ font: [] }],
     ["clean"],
   ],
 };
@@ -17,6 +17,7 @@ export default function Description({ value, onChange }) {
   return (
     <section className=" bg-white border-2 p-2 rounded-xl">
       <ReactQuill
+        theme="snow"
         value={value || ""}
         onChange={onChange}
         modules={modules}

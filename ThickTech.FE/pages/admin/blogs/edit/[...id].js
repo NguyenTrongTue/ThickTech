@@ -1,7 +1,7 @@
 import Layout from "@/components/admin/AdminLayout";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import BlogForm from "@/components/admin/BlogForm";
+import BlogForm from "@/components/admin/blog/BlogForm";
 import apiService from "@/services/api";
 export default function EditBlogPage() {
   const [blogInfo, setBlogInfo] = useState(null);

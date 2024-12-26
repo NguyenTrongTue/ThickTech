@@ -39,7 +39,7 @@ const Header = ({ session }) => {
     },
     {
       title: "Blog",
-      link: "/blog",
+      link: "/blogs",
     },
     {
       title: "Contact",

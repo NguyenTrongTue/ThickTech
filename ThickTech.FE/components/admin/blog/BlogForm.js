@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from "react";
-import "react-quill/dist/quill.snow.css"; // Giao diện mặc định
-import { useRouter } from "next/router";
 import { ReactSortable } from "react-sortablejs";
 import apiService from "@/services/api";
-import Input from "@/components/input/Input";
-import Notification from "@/components/Notification";
-import ContextForm from "@/components/admin/Description";
-import ActionBtn from "../button/Button";
+import React, { useState, useEffect } from "react";
+import Description from "@/components/admin/Description";
+import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
+import { styled } from "@mui/system";
+const ActionButton = styled(Button)({
+  backgroundColor: "#7c3aed",
+  "&:hover": {
+    backgroundColor: "#5b21b6",
+  },
+});
 export default function BlogEditor({
   _id,
   author: existingAuthor,
@@ -19,66 +30,67 @@ export default function BlogEditor({
   const [title, setTitle] = useState(existingTitle || "");
   const [images, setImages] = useState(existingImages || []);
   const [content, setContent] = useState(existingContent || "");
-  const [isEditing, setIsEditing] = useState(true);
-  const router = useRouter();
-  const [notification, setNotification] = useState({ type: "", message: "" });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     setTitle(existingTitle || "");
-    setContent(existingContent || "Write your blog here...");
+    setContent(existingContent || "");
     setAuthor(existingAuthor || "");
     setImages(existingImages || []);
   }, [existingTitle, existingContent, existingAuthor, existingImages]);
 
-  function toggleEditing() {
-    setIsEditing(!isEditing);
-  }
+  const validateForm = () => {
+    const newErrors = {};
+    if (!author) newErrors.author = "Author is required.";
+    if (!title) newErrors.title = "Title is required.";
+    if (!content) newErrors.content = "Content is required.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Hàm lưu nội dung vào server
   const saveBlog = async (ev) => {
     ev.preventDefault();
+    if (!validateForm()) return;
+
     setLoading(true);
     const formData = new FormData();
 
     formData.append("title", title);
     formData.append("content", content);
     formData.append("author", author);
+
     const oldImages = images.filter((img) => !img.file); // Lọc URL cũ
     oldImages.forEach((url, index) => {
       formData.append(`existingImages[${index}]`, url);
     });
+
     // Thêm hình ảnh mới (file)
     const newImages = images.filter((img) => img.file); // Lọc file mới
     newImages.forEach((img) => {
       formData.append("images", img.file);
     });
-    try {
-      console.log(title, content, author, images);
 
+    try {
       if (_id) {
         await apiService.postWithFile(`/api/blogs/${_id}`, formData);
       } else {
         await apiService.postWithFile("/api/blogs", formData);
       }
 
-      setNotification({
-        type: "success",
-        message: "Product saved successfully!",
-      });
-
-      setTimeout(() => router.push("/admin/blogs"), 4000);
+      toast.success("Blog saved successfully");
+      router.push("/admin/blogs");
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "An unexpected error occurred";
-      setNotification({
-        type: "error",
-        message: errorMessage,
-      });
-      console.error("Error saving product:", errorMessage);
+      toast.error("Error saving blog");
+      console.error("Error saving blog:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
+
   function uploadImages(ev) {
     const files = ev.target?.files;
     if (files?.length > 0) {
@@ -106,38 +118,38 @@ export default function BlogEditor({
 
   return (
     <div className="min-h-full flex flex-col">
-      {notification.message && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
-      <h1 className="text-2xl mb-2 w-ful uppercase">{headerTitle}</h1>
-      <div className="space-y-4 p-4 bg-white rounded-lg shadow-md flex flex-col flex-1">
+      <h1 className="text-2xl mb-2 w-full uppercase">{headerTitle}</h1>
+      <Box
+        className="space-y-4 p-4 bg-white rounded-lg shadow-md"
+        component="form"
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          label="Author"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          fullWidth
+          size="small"
+          error={!!errors.author}
+          helperText={errors.author}
+          variant="outlined"
+        />
+        <TextField
+          label="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          fullWidth
+          size="small"
+          error={!!errors.title}
+          helperText={errors.title}
+          variant="outlined"
+        />
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Author
-          </label>
-          <Input
-            type="text"
-            placeholder="Enter author name"
-            value={author}
-            onChange={(ev) => setAuthor(ev.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Title
-          </label>
-          <Input
-            type="text"
-            placeholder="Enter blog title"
-            value={title}
-            onChange={(ev) => setTitle(ev.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <Typography variant="body1" className="mb-1">
             Photos
-          </label>
-          <div className="mt-2 flex flex-wrap gap-4">
+          </Typography>
+          <Box className="mt-2 flex flex-wrap gap-4">
             <ReactSortable
               list={images}
               setList={updateImagesOrder}
@@ -201,48 +213,35 @@ export default function BlogEditor({
                 multiple
               />
             </label>
-          </div>
+          </Box>
         </div>
-        <div className="flex-1 flex flex-col">
-          <div className="flex flex-row justify-between place-items-end">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <ActionBtn
-              onClick={toggleEditing}
-              className="p-2 text-sm mb-2 bg-slate-500 text-white rounded-md"
-            >
-              {isEditing ? "Edit" : "View"}
-            </ActionBtn>
-          </div>
-          {isEditing ? (
-            <>
-              {/* Trình chỉnh sửa nội dung */}
-              <ContextForm value={content} onChange={setContent} />
-            </>
-          ) : (
-            <>
-              {/* Hiển thị nội dung blog */}
-              <div
-                className="border rounded-md p-4 max-w-full"
-                dangerouslySetInnerHTML={{ __html: content }}
-              />
-            </>
+        <Box className="flex-1">
+          <Typography variant="body1" className="mb-1">
+            Description
+          </Typography>
+          <Description
+            value={content || ""}
+            onChange={setContent}
+            error={!!errors.content}
+          />
+          {errors.content && (
+            <Typography variant="caption" color="error">
+              {errors.content}
+            </Typography>
           )}
-        </div>
-        <div className="text-right">
-          <button
-            type="submit"
+        </Box>
+        <Box className="text-right">
+          <ActionButton
             onClick={saveBlog}
-            className={`px-6 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
             disabled={loading}
+            variant="contained"
+            color="primary"
+            className="px-4 py-2"
           >
-            {loading ? "Saving..." : "Save"}
-          </button>
-        </div>
-      </div>
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Save"}
+          </ActionButton>
+        </Box>
+      </Box>
     </div>
   );
 }

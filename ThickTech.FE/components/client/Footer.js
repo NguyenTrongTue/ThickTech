@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import FacebookIon from "@/public/assets/Icons/facebook.svg";
 import ZaloIcon from "@/public/assets/Icons/zalo.svg";
-import InstagramIcon from "@/public/assets/Icons/instagram.png";
+import InstagramIcon from "@/public/assets/Icons/instagram.svg";
 import Logo from "@/public/assets/logo.png";
 const Footer = () => {
   const title = " là một cộng đồng yêu thích kĩ thuật và công nghệ thông tin.";

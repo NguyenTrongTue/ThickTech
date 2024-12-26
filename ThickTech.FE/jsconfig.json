@@ -6,7 +6,8 @@
       "@/services/*": ["./services/*"],
       "@lib/*": ["./lib/*"],
       "@content/*": ["./public/content/*"],
-      "@/utils/*": ["./utils/*"]
+      "@/utils/*": ["./utils/*"],
+      "@/api/*": ["./pages/api/*"]
     }
   }
 }

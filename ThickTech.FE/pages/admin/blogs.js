@@ -1,30 +1,62 @@
 import Layout from "@/components/admin/AdminLayout";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import apiService from "@/services/api";
 import ButtonLink from "@/components/button/ButtonLink";
-import ActionBtn from "@/components/button/Button";
-import Input from "@/components/input/Input";
-import ReactPaginate from "react-paginate"; // Import React Paginate
 import Fuse from "fuse.js"; // Import fuse.js
-import * as XLSX from "xlsx"; // Import thư viện xlsx
+import { toast } from "react-hot-toast";
+import { TextField, Tooltip } from "@mui/material";
+import { Trash2, Edit2 } from "lucide-react";
+import { Button } from "@nextui-org/react";
+import Pagination from "@/components/admin/Pagination";
+import ConfirmModal from "@/components/Modal";
+import { useRouter } from "next/router";
 export default function B() {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Search term
   const [currentPage, setCurrentPage] = useState(0); // Current page
-  const [totalPages, setTotalPages] = useState(1); // Total pages
-  const [itemsPerPage, setItemsPerPage] = useState(15); // Items per page
-
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Items per page
+  const [selectedBlog, setSelectedBlog] = useState(null); // Lưu dữ liệu chỉnh sửa
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+  const fetchBlogs = async () => {
+    try {
+      // Gọi API để lấy danh sách danh mục
+      const response = await apiService.get("/api/blogs");
+      const data = await response;
+      setBlogs(data);
+      setFilteredBlogs(data);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
   useEffect(() => {
-    apiService.get("/api/blogs").then((response) => {
-      const allBlogs = response;
-      setBlogs(allBlogs);
-      setFilteredBlogs(allBlogs);
-      setTotalPages(Math.ceil(allBlogs.length / itemsPerPage)); // Calculate total pages
-    });
+    fetchBlogs();
+    // setBlogs(Data);
+    // setFilteredBlogs(Data);
   }, []);
 
+  const openModalDelete = (blog) => {
+    setSelectedBlog(blog); // Gán dữ liệu danh mục cần xóa
+    setIsDeleting(true); // Mở modal xác nhận xóa
+  };
+  const handleDelete = async () => {
+    try {
+      await apiService.delete(`/api/blogs/${selectedBlog._id}`); // Gửi yêu cầu xóa
+      setIsDeleting(false); // Đóng modal
+      toast.success("Blog deleted successfully");
+      fetchBlogs();
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+      toast.error("Failed to delete blog");
+    } finally {
+      setIsDeleting(false); // Đóng modal
+    }
+  };
+
+  const handleEdit = (blog) => {
+    router.push(`/admin/blogs/edit/${blog._id}`);
+  };
   useEffect(() => {
     if (searchTerm) {
       // Cấu hình Fuse.js
@@ -48,55 +80,41 @@ export default function B() {
     setSearchTerm(e.target.value); // Cập nhật từ khóa tìm kiếm
   };
 
-  const exportToExcel = () => {
-    // Tạo mảng chứa dữ liệu để xuất
-    const exportData = filteredBlogs.map((blog) => ({
-      Author: blog.author,
-      Title: blog.title,
-      Content: blog.content,
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(exportData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Blogs");
-    XLSX.writeFile(wb, "blogs.xlsx");
-  };
-
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-
-  // Lấy dữ liệu của trang hiện tại
   const currentItems = filteredBlogs.slice(startIndex, endIndex);
-
-  // Xử lý thay đổi trang
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
   };
 
   return (
     <Layout>
+      <ConfirmModal
+        isOpen={isDeleting}
+        onClose={() => setIsDeleting(false)}
+        onConfirm={handleDelete}
+        message="Bạn chắc chắn muốn bỏ danh mục này?"
+        itemTitle={selectedBlog?.title}
+      />
       <div className="space-y-4 p-4 bg-white rounded-lg shadow-md flex flex-col min-h-full">
         <div className="flex justify-between align-center text-center flex-wrap h-full ">
           <div className="w-full lg:w-1/3 md:w-1/2 xl:w-1/4 mb-2">
-            <Input
+            <TextField
+              label="Search"
+              variant="outlined"
+              size="small"
               type="search"
+              color="primary"
               value={searchTerm}
-              placeholder="Search blog"
               onChange={handleSearch}
-              className=""
+              fullWidth
+              sx={{ flex: "1 1 auto", maxWidth: 300 }}
             />
           </div>
           <div className="flex items-center gap-2 flex-row">
             <ButtonLink href={"/admin/blogs/new"} className={"px-8"}>
               Add Blog
             </ButtonLink>
-            <ActionBtn
-              onClick={exportToExcel}
-              color={"slate"}
-              className={"outline-slate-400 border-slate-600"}
-            >
-              Export to Excel
-            </ActionBtn>
           </div>
         </div>
         <div className="w-full flex-1">
@@ -113,86 +131,49 @@ export default function B() {
               {currentItems.map((blog) => (
                 <tr key={blog._id}>
                   <td>{blog.author}</td>
-                  <td className="text-center">{blog.title}</td>
+                  <td className="text-center">
+                    {blog.title && blog.title.length > 50 ? (
+                      <Tooltip title={blog.title}>
+                        <span>{`${blog.title.slice(0, 50)}...`}</span>
+                      </Tooltip>
+                    ) : (
+                      <span>{blog.title}</span>
+                    )}
+                  </td>
                   <td className="text-center">{blog.createdAt}</td>
                   <td className="text-center">
-                    <Link
-                      className="p-2 text-blue-500 bg-blue-200 hover:bg-blue-500 hover:text-white border rounded"
-                      href={"/admin/blogs/edit/" + blog._id}
+                    <Button
+                      onClick={() => handleEdit(blog)}
+                      isIconOnly
+                      size="sm"
+                      className="p-2 mr-2 border rounded bg-blue-200 text-blue-600 hover:bg-blue-400 hover:text-white"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                        />
-                      </svg>
-                    </Link>
-                    <Link
-                      className="py-2 text-red-600 bg-red-200 hover:bg-red-300"
-                      href={"/admin/blogs/delete/" + blog._id}
+                      <Edit2 size={13} />
+                    </Button>
+                    <Button
+                      onClick={() => openModalDelete(blog)}
+                      isLoading={isDeleting}
+                      isDisabled={isDeleting}
+                      isIconOnly
+                      className="p-2 border rounded bg-red-200 text-red-600 hover:bg-red-400 hover:text-white"
+                      size="sm"
+                      color="danger"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                        />
-                      </svg>
-                    </Link>
+                      <Trash2 size={13} />
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="flex items-center justify-between bg-slate-400 p-2">
-          <div className="text-center">
-            Showing {startIndex + 1}-{Math.min(endIndex, filteredBlogs.length)}{" "}
-            of {filteredBlogs.length} blogs
-          </div>
-          <div className="text-center flex items-center whitespace-nowrap gap-2">
-            Select page:
-            <select
-              value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(parseInt(e.target.value))}
-              className="px-2 py-1 border rounded"
-            >
-              <option value={15}>15</option>
-              <option value={30}>30</option>
-              <option value={45}>45</option>
-            </select>
-            <ReactPaginate
-              pageCount={Math.ceil(filteredBlogs.length / itemsPerPage)}
-              pageRangeDisplayed={5}
-              marginPagesDisplayed={2}
-              onPageChange={handlePageChange}
-              previousLabel={"<"}
-              nextLabel={">"}
-              containerClassName="pagination flex items-center justify-between"
-              pageClassName="mx-1 rounded hover:bg-gray-200"
-              pageLinkClassName="page-link text-blue-500 p-2 rounded focus:outline-none bg-white"
-              activeLinkClassName="bg-slate-600 text-white"
-              previousClassName="previous-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
-              nextClassName="next-item bg-gray-200 hover:bg-slate-600 hover:text-white rounded p-1 px-3"
-              disabledClassName="disabled text-gray-400"
-            />
-          </div>
-        </div>
+        <Pagination // Thêm component Pagination
+          totalItems={filteredBlogs.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+          onItemsPerPageChange={(value) => setItemsPerPage(value)}
+        />
       </div>
     </Layout>
   );

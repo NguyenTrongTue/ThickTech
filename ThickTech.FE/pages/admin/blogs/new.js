@@ -1,4 +1,4 @@
-import BlogForm from "@/components/admin/BlogForm";
+import BlogForm from "@/components/admin/blog/BlogForm";
 import Layout from "@/components/admin/AdminLayout";
 
 export default function NewProduct() {

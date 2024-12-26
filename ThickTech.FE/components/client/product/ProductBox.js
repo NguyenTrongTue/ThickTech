@@ -12,9 +12,10 @@ export default function ProductBox({
   selling_price,
   images,
   product_category,
+  product_slug,
   is_featured,
 }) {
-  const url = "/product/" + _id;
+  const url = "/product/" + product_slug;
   const urlByNow = `/checkout?type=buynow&productId=${_id}`;
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4 mt-4 hover:scale-[1.04] transform transition duration-500 ease-in-out">

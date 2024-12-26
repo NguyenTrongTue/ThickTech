@@ -1,4 +1,4 @@
-import ProductForm from "@/components/admin/ProductForm";
+import ProductForm from "@/components/admin/product/ProductForm";
 import Layout from "@/components/admin/AdminLayout";
 
 export default function NewProduct() {
