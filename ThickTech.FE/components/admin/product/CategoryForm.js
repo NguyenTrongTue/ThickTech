@@ -9,27 +9,22 @@ import { TextField } from "@mui/material";
 export default function CategoryForm({
   _id,
   category_name: existingCategory,
-  category_slug: existingCategory_slug,
   onClose,
   onSave,
 }) {
   const [categpry, setCategpry] = useState(existingCategory || "");
-  const [category_slug, setCategory_slug] = useState(
-    existingCategory_slug || ""
-  );
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const validateForm = () => {
     const newErrors = {};
     if (!categpry) newErrors.categpry = "Category Name is required.";
-    if (!category_slug) newErrors.category_slug = "Category Slug is required.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
   useEffect(() => {
     setCategpry(existingCategory || "");
-    setCategory_slug(existingCategory_slug || "");
-  }, [existingCategory, existingCategory_slug]);
+  }, [existingCategory]);
 
   const saveCategory = async (ev) => {
     ev.preventDefault();
@@ -38,7 +33,6 @@ export default function CategoryForm({
     setLoading(true);
     const formData = new FormData();
     formData.append("category_name", categpry);
-    formData.append("category_slug", category_slug);
 
     try {
       if (_id) {
@@ -64,17 +58,6 @@ export default function CategoryForm({
         onChange={(ev) => setCategpry(ev.target.value)}
         error={!!errors.categpry}
         helperText={errors.categpry}
-        fullWidth
-        size="small"
-        variant="outlined"
-      />
-
-      <TextField
-        label="Category Slug"
-        value={category_slug}
-        onChange={(ev) => setCategory_slug(ev.target.value)}
-        error={!!errors.category_slug}
-        helperText={errors.category_slug}
         fullWidth
         size="small"
         variant="outlined"

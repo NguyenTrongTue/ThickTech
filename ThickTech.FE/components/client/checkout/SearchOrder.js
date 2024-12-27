@@ -45,7 +45,6 @@ export default function SearchOrder() {
         <form className="flex flex-row p-4 md:w-96">
           <input
             type="search"
-            isRequired={false}
             label={"Tìm kiếm đơn hàng"}
             placeholder="Nhập số điện thoại hoặc email"
             value={keyword}

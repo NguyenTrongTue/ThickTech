@@ -18,6 +18,7 @@ module.exports = {
     extend: {
       borderColor: ["focus"],
       ringColor: ["focus"],
+      scrollbar: ["rounded"],
     },
   },
   plugins: [],

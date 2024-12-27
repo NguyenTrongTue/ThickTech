@@ -5,8 +5,7 @@ import ProductList from "@/components/client/product_cart/ProductList";
 import ConfirmModal from "@/components/client/product_cart/ConfirmModal";
 import toast from "react-hot-toast";
 import ButtonLink from "@/components/button/ButtonLink";
-import apiService from "@/services/api";
-
+import { getCartProducts } from "@/api/product";
 export default function CartPage() {
   const {
     cartProducts,
@@ -39,7 +38,7 @@ export default function CartPage() {
 
   const fetchProducts = async (ids) => {
     try {
-      const response = await apiService.post("/api/cart", { ids });
+      const response = await getCartProducts(ids);
       setProducts(response);
     } catch (error) {
       console.error("Error fetching products:", error);

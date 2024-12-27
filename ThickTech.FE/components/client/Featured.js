@@ -54,11 +54,11 @@ export default function Featured({ product }) {
     <div className="bg-gray-100">
       <div className="container mx-auto">
         <div className="sm:flex justify-between items-end">
-          <h3 className="text-slate-600 text-2xl lg:text-3xl font-semibold">
-            Popular products.
+          <h3 className="text-slate-800 text-xl lg:text-2xl font-semibold">
+            Popular products
           </h3>
           <Link
-            href={"/"}
+            href={"/products"}
             className="text-lg font-medium space-links hover:underline text-gray-500 hover:text-red-500 transition-all"
           >
             Explore all products ...

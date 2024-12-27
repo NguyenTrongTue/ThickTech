@@ -4,8 +4,8 @@ import { toast } from "react-hot-toast";
 import Checkout from "@/components/client/checkout/Checkout";
 import { CartContext } from "@/components/client/CartContext";
 import Error from "@/components/Error";
-import apiService from "@/services/api";
 import MainLayer from "@/components/client/MainLayer";
+import { getCartProducts } from "@/api/product";
 
 export default function CheckoutPage() {
   // Sử dụng CartContext
@@ -30,8 +30,7 @@ export default function CheckoutPage() {
   const fetchProducts = async (ids) => {
     try {
       // Fetch danh sách sản phẩm từ API
-      const response = await apiService.post("/api/cart", { ids });
-
+      const response = await getCartProducts(ids);
       // Xử lý số lượng dựa trên chế độ (mua ngay hoặc giỏ hàng)
       const mergedProducts = response.map((product) => {
         let quantity = 1; // Mặc định là 1 cho chế độ mua ngay

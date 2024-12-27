@@ -10,6 +10,8 @@ import { Button } from "@nextui-org/react";
 import Pagination from "@/components/admin/Pagination";
 import ConfirmModal from "@/components/Modal";
 import { useRouter } from "next/router";
+import moment from "moment";
+
 export default function B() {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
@@ -122,7 +124,7 @@ export default function B() {
             <thead>
               <tr>
                 <td>Blog Author</td>
-                <td className="text-center">Title</td>
+                <td className="">Title</td>
                 <td className="text-center">Time Created</td>
                 <td className="text-center">Action</td>
               </tr>
@@ -131,7 +133,7 @@ export default function B() {
               {currentItems.map((blog) => (
                 <tr key={blog._id}>
                   <td>{blog.author}</td>
-                  <td className="text-center">
+                  <td>
                     {blog.title && blog.title.length > 50 ? (
                       <Tooltip title={blog.title}>
                         <span>{`${blog.title.slice(0, 50)}...`}</span>
@@ -140,7 +142,9 @@ export default function B() {
                       <span>{blog.title}</span>
                     )}
                   </td>
-                  <td className="text-center">{blog.createdAt}</td>
+                  <td className="text-center">
+                    {moment(blog.createdAt).format("MM/DD/YYYY")}
+                  </td>
                   <td className="text-center">
                     <Button
                       onClick={() => handleEdit(blog)}

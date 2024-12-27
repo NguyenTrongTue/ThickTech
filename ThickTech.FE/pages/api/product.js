@@ -61,3 +61,13 @@ export async function getAllProductsWithSlug() {
     throw new Error(error.message || `Failed to fetch post slugs.`);
   }
 }
+
+// lấy sản phẩm trong giỏ hàng
+export async function getCartProducts(ids) {
+  try {
+    const res = await apiService.post("/api/cart", { ids });
+    return res;
+  } catch (error) {
+    throw new Error(error.message || `Failed to fetch post with id: ${id}`);
+  }
+}

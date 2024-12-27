@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import MainLayer from "@/components/client/MainLayer";
 import NewProducts from "@/components/client/product/NewProducts";
-import apiService from "@/services/api";
 import Fuse from "fuse.js";
 import { getAllProducts, getAllCategories } from "@/api/product";
 
@@ -63,9 +62,9 @@ export default function Products({ categories, products }) {
       title="Products - ThickTech"
       description="Các sản phẩm phục vụ việc học tập liên quan đến kĩ thuật và công nghệ"
     >
-      <div className="flex flex-col lg:flex-row gap-6 bg-white p-4 rounded-md shadow-md">
+      <div className="flex flex-col lg:flex-row gap-3 bg-white p-4 rounded-md shadow-md">
         {/* Sidebar Bộ Lọc */}
-        <aside className="w-full lg:w-1/4 p-4 bg-gray-100 rounded-md shadow-md">
+        <aside className="w-full lg:w-1/6 p-4 bg-gray-100 rounded-md shadow-md">
           <h3 className="text-lg font-semibold mb-4">Danh mục</h3>
           <ul className="space-y-2">
             {categories.length > 0 ? (
@@ -93,7 +92,7 @@ export default function Products({ categories, products }) {
         </aside>
 
         {/* Nội dung chính */}
-        <main className="w-full lg:w-3/4">
+        <main className="w-full lg:w-5/6">
           {/* Ô tìm kiếm */}
           <div className="mb-4">
             <input

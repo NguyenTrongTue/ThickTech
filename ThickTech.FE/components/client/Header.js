@@ -7,7 +7,7 @@ import Logo from "@/components/Logo";
 import { signOut } from "next-auth/react";
 import DropAcc from "@/components/client/DropAcc";
 import ButtonLink from "../button/ButtonLink";
-
+import { Tooltip } from "@mui/material";
 import {
   Car,
   Earth,
@@ -42,8 +42,8 @@ const Header = ({ session }) => {
       link: "/blogs",
     },
     {
-      title: "Contact",
-      link: "/contact",
+      title: "Courses",
+      link: "/courses",
     },
     { title: "About", link: "/about" },
     {
@@ -81,13 +81,14 @@ const Header = ({ session }) => {
 
           <div className="font-medium flex justify-center items-center gap-4">
             <Link
-              title="Đơn hàng"
               href="/cart/order-search"
               className={
                 "p-2 flex items-center text-xs transition-all bg-white rounded-full shadow-md border-4 border-red-200 text-red-500 hover:bg-red-500 hover:text-white transition-100"
               }
             >
-              <ListChecks size={24} />
+              <Tooltip title={"Đơn hàng"} placement="left">
+                <ListChecks size={24} />
+              </Tooltip>
             </Link>
             <Link
               href="/cart"

@@ -1,7 +1,6 @@
 import ButtonCard from "@/components/button/ButtonCart";
 import ButtonLink from "@/components/button/ButtonLink";
 import Link from "next/link";
-import { useContext } from "react";
 
 import FormatNumber from "@/utils/formatNumber";
 export default function ProductBox({
@@ -16,7 +15,7 @@ export default function ProductBox({
   is_featured,
 }) {
   const url = "/product/" + product_slug;
-  const urlByNow = `/checkout?type=buynow&productId=${_id}`;
+  const urlByNow = `/cart/checkout?type=buynow&productId=${_id}`;
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4 mt-4 hover:scale-[1.04] transform transition duration-500 ease-in-out">
       <div className="bg-white m-2 px-3 pt-3 shadow-courses rounded-2xl">
@@ -42,14 +41,14 @@ export default function ProductBox({
         </div>
 
         {/* Product Info */}
-        <div className="pt-3 pb-3">
-          <Link href={url} title={title}>
-            <h3 className="text-xl font-semibold text-black truncate">
+        <div className="py-3">
+          <Link href={url}>
+            <h3 className="text-base font-semibold text-black line-clamp-2">
               {title}
             </h3>
           </Link>
 
-          <div className="flex items-center py-3 text-center justify-center">
+          <div className="flex items-center py-2 text-center justify-center">
             <h3 className="text-lg font-medium text-red-600">
               <FormatNumber number={selling_price} />
             </h3>

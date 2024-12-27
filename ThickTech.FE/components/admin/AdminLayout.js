@@ -1,55 +1,28 @@
+import React, { useState } from "react";
+import Sidebar from "@/components/admin/Sidebar/Nav";
+import Header from "@/components/admin/Sidebar/Header";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import Nav from "@/components/admin/Nav";
-import Header from "@/components/admin/Header";
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { usePathname } from "next/navigation";
 import Spinner from "../Spinner";
+import { useRouter } from "next/router";
 
-export default function AdminLayout({ children }) {
-  const { data: session, status } = useSession(); // Lấy trạng thái và session từ NextAuth
+export default function DefaultLayout({ children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { data: session, status } = useSession();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-  const sidebarRef = useRef(null);
-
-  // Toggle Sidebar
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
-  // Mở Sidebar khi pathname thay đổi
+  // Kiểm tra quyền admin
   useEffect(() => {
-    toggleSidebar();
-  }, [pathname]);
-
-  // Đóng Sidebar khi nhấp bên ngoài
-  useEffect(() => {
-    function handleClickOutsideEvent(event) {
-      if (sidebarRef.current && !sidebarRef?.current?.contains(event.target)) {
-        setIsOpen(false);
+    if (status === "authenticated") {
+      // Giả sử thông tin quyền được lưu trong session.user.role
+      if (!session.user || session.isAdmin === false) {
+        router.replace("/403"); // Chuyển hướng tới trang lỗi nếu không phải admin
       }
+    } else if (status === "unauthenticated") {
+      router.replace("/auth/signin"); // Chuyển hướng tới trang login nếu không đăng nhập
     }
-    document.addEventListener("mousedown", handleClickOutsideEvent);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideEvent);
-    };
-  }, []);
+  }, [session, status, router]);
 
-  // Kiểm tra session và quyền admin
-  useEffect(() => {
-    if (status === "unauthenticated" || !session) {
-      router.push("/admin"); // Chuyển đến trang login nếu chưa đăng nhập
-      return;
-    }
-
-    if (status === "authenticated" && !session?.isAdmin) {
-      router.push("/404"); // Chuyển đến trang 404 nếu không phải admin
-    }
-  }, [status, session, router]);
-
-  // Loading state
   if (status === "loading") {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -60,32 +33,22 @@ export default function AdminLayout({ children }) {
       </div>
     );
   }
-
   return (
-    <div className="bg-slate-200 min-h-screen w-full flex">
-      {/* Sidebar */}
-      <div className="flex">
-        {/* Sidebar cho màn hình lớn */}
-        <div className="hidden md:block">
-          <Nav />
-        </div>
-
-        {/* Sidebar cho màn hình nhỏ */}
-        <div
-          ref={sidebarRef}
-          className={`fixed md:hidden ease-in-out transition-all duration-400 z-50 
-          ${isOpen ? "translate-x-0" : "-translate-x-[260px]"}`}
-        >
-          <Nav />
+    <>
+      <div className="flex w-full h-screen">
+        <Toaster position="top-center" reverseOrder={false} />
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <div className="relative flex flex-1 flex-col lg:ml-[270px]">
+          <Header
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={setSidebarOpen}
+            session={session}
+          />
+          <main className="flex-1 bg-slate-200">
+            <div className="mx-auto p-4 md:p-4 2xl:p-10">{children}</div>
+          </main>
         </div>
       </div>
-
-      {/* Main content */}
-      <section className="flex-1 flex flex-col min-h-screen overflow-hidden">
-        <Toaster position="top-center" reverseOrder={false} />
-        <Header toggleSidebar={toggleSidebar} session={session} />
-        <section className="pt-16 mt-2 flex-1 px-4 mb-4">{children}</section>
-      </section>
-    </div>
+    </>
   );
 }

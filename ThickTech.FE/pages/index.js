@@ -1,6 +1,8 @@
 import Featured from "@/components/client/Featured";
 import MainLayer from "@/components/client/MainLayer";
 import apiService from "@/services/api";
+import React from "react";
+import { getAllProducts } from "@/api/product";
 export default function HomePage({ featuredProduct }) {
   return (
     <MainLayer
@@ -15,9 +17,7 @@ export default function HomePage({ featuredProduct }) {
 export async function getServerSideProps() {
   try {
     // Gọi API để lấy dữ liệu sản phẩm
-    const response = await apiService.get("/api/products");
-    const featuredProduct = response;
-
+    const featuredProduct = await getAllProducts();
     return {
       props: {
         featuredProduct,

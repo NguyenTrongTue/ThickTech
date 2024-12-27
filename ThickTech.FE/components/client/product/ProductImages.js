@@ -54,7 +54,8 @@ export default function ProductImages({ images }) {
               <Image
                 src={image}
                 alt={`Image ${index}`}
-                layout="fill"
+                width={800}
+                height={100}
                 className="object-cover rounded-md"
               />
             </div>
@@ -87,7 +88,8 @@ export default function ProductImages({ images }) {
             <Image
               src={image}
               alt={`Thumbnail ${index}`}
-              layout="fill"
+              width={300}
+              height={200}
               className="object-cover rounded-md cursor-pointer p-1"
             />
           </div>

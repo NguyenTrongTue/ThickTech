@@ -121,7 +121,6 @@ table.basic a {
   pointer-events: none;
 }
 
-
 .pagination {
   display: flex;
   list-style: none;
@@ -129,7 +128,10 @@ table.basic a {
   gap: 8px;
 }
 
-.page, .prev, .next, .break {
+.page,
+.prev,
+.next,
+.break {
   padding: 8px 12px;
   cursor: pointer;
   border: 1px solid #ccc;
@@ -142,14 +144,23 @@ table.basic a {
   border: 1px solid #007bff;
 }
 
-.prev, .next {
+.prev,
+.next {
   font-weight: bold;
 }
 
 /* post */
 
 .post_item:hover {
-  box-shadow:
-    1px 0px 20px -1px rgba(0, 0, 0, 0.2), 0px 0px 20px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 1px 0px 20px -1px rgba(0, 0, 0, 0.2),
+    0px 0px 20px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
 
+.sidebar-content {
+  overflow-y: auto; /* Nếu cần thanh cuộn */
+  scrollbar-width: none; /* Ẩn thanh cuộn trong Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trong IE */
+}
+.sidebar-content::-webkit-scrollbar {
+  display: none; /* Ẩn thanh cuộn trong Chrome, Safari */
 }

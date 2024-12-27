@@ -77,7 +77,7 @@ export default function ProductItem({ product, categoryProducts }) {
 
           <div className=" flex items-center gap-5 mt-6  flex-row">
             <ButtonLink
-              href={"/order/" + product._id}
+              href={"/cart/checkout?type=buynow&productId=" + product._id}
               color="red"
               className="w-1/2"
             >
