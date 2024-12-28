@@ -11,7 +11,6 @@ using ThickTech.BE.Domain.Repositories;
 using ThickTech.BE.Host.OptionsSetup;
 using ThickTech.BE.Infrastructure.Authentication;
 using ThickTech.BE.Infrastructure.BackgroundJobs;
-using ThickTech.BE.Infrastructure.Idempotence;
 using ThickTech.BE.Infrastructure.Services;
 using ThickTech.BE.Persistence;
 using ThickTech.BE.Persistence.Interceptors;
@@ -19,10 +18,12 @@ using ThickTech.BE.Persistence.Repositories;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddStackExchangeRedisCache(redisOptions =>
 {
     string connection = builder.Configuration

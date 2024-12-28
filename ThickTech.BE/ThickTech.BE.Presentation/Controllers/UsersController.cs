@@ -19,7 +19,7 @@ public sealed class UsersController : ApiController
     {
     }
 
-    [HasPermission(Permission.Product)]
+    //[HasPermission(Permission.Product)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
