@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.20" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Quartz" Version="3.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ThickTech.BE.Application\ThickTech.BE.Application.csproj" />
+    <ProjectReference Include="..\ThickTech.BE.Domain\ThickTech.BE.Domain.csproj" />
+    <ProjectReference Include="..\ThickTech.BE.Persistence\ThickTech.BE.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
