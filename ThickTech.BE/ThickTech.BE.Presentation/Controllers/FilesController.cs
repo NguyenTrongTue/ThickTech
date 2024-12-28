@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ThickTech.BE.Application.Users;
+using ThickTech.BE.Application.Files;
 using ThickTech.BE.Domain.Enums;
 using ThickTech.BE.Domain.Shared;
 using ThickTech.BE.Infrastructure.Authentication;
@@ -17,11 +17,11 @@ public class FilesController : ApiController
     {
     }
     //[HasPermission(Permission.Product)]
-    //[HttpGet("{id:guid}")]
-    //public async Task<IActionResult> GetUserById(IFormFile formFile, CancellationToken cancellationToken)
-    //{
-    //    var query = new GetUserByIdQuery(formFile);
-    //    Result<UserResponse> response = await Sender.Send(query, cancellationToken);
-    //    return response.IsSuccess ? Ok(response.Value) : NotFound(response.Error);
-    //}
+    [HttpPost("add_file")]
+    public async Task<IActionResult> GetUserById(List<IFormFile> formFiles, FileType fileType, CancellationToken cancellationToken)
+    {
+        var commnad = new CreateFileCommand(formFiles, fileType);
+        Result<string> response = await Sender.Send(commnad, cancellationToken);
+        return response.IsSuccess ? Ok(response.Value) : NotFound(response.Error);
+    }
 }

@@ -65,4 +65,25 @@ public static class DomainErrors
           "Password.InvalidFormat",
           "Mật khẩu phải bao gồm ký tự thường và số");
     }
+    public static class File
+    {
+        public static readonly Error TypeFileError = new(
+            "File.TypeFileError",
+            "File bạn tạo không có trong danh mục nào");
+    }
+    public static class Price
+    {
+        public static readonly Error LessThanZero = new(
+            "File.LessThanZero",
+            "Giá sản phẩm không được phép nhỏ hơn 0");
+    }
+    public static class DiscountPrice
+    {
+        public static readonly Error LessThanZero = new(
+            "File.LessThanZero",
+            "Giá giảm sản phẩm không được phép nhỏ hơn 0");
+        public static readonly Error InvalidDiscountPrice = new(
+            "File.InvalidDiscountPrice",
+            "Giá giảm sản phẩm không được phép lớn hơn giá bán gốc");
+    }
 }

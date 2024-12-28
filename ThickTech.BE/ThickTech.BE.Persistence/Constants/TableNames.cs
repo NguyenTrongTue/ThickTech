@@ -4,6 +4,10 @@ internal static class TableNames
 {
     internal const string users = nameof(users);
 
+    internal const string products = nameof(products);
+
+    internal const string blogs = nameof(blogs);
+
     internal const string outbox_messages = nameof(outbox_messages);
 
     internal const string outbox_message_consumers = nameof(outbox_message_consumers);
