@@ -3,7 +3,7 @@ using ThickTech.BE.Domain.Entities;
 using ThickTech.BE.Domain.Repositories;
 using ThickTech.BE.Domain.Shared;
 using ThickTech.BE.Domain.ValueObjects;
-namespace ThickTech.BE.Application.Users;
+namespace ThickTech.BE.Application;
 internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, bool>
 {
     private readonly IProductRepository _productRepository;
@@ -29,7 +29,7 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
         {
             return Result.Failure<bool>(discountPriceResult.Error);
         }
-        var user = Product.Create(
+        var product = Product.Create(
             Guid.NewGuid(),
             request.title,
             request.description,
@@ -38,7 +38,7 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
             discountPriceResult.Value.Value,
             request.images);
 
-        _productRepository.Add(user);
+        _productRepository.Add(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }
