@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using ThickTech.BE.Domain.ValueObjects;
-namespace ThickTech.BE.Application.Members;
+namespace ThickTech.BE.Application;
 internal class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
     public CreateProductCommandValidator()

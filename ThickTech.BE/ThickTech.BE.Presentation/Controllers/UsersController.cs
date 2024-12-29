@@ -3,15 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using ThickTech.BE.Application;
 using ThickTech.BE.Application.Members.Login;
 using ThickTech.BE.Application.Users;
-using ThickTech.BE.Domain.Enums;
 using ThickTech.BE.Domain.Shared;
-using ThickTech.BE.Infrastructure.Authentication;
 using ThickTech.BE.Presentation.Abstractions;
 using ThickTech.BE.Presentation.Contracts;
 
 namespace ThickTech.BE.Presentation.Controllers;
 
-[Route("api/members")]
+[Route("api/users")]
 public sealed class UsersController : ApiController
 {
     public UsersController(ISender sender)

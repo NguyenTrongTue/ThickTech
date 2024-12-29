@@ -8,6 +8,10 @@ internal static class TableNames
 
     internal const string blogs = nameof(blogs);
 
+    internal const string categories = nameof(categories);
+
+    internal const string orders = nameof(orders);
+
     internal const string outbox_messages = nameof(outbox_messages);
 
     internal const string outbox_message_consumers = nameof(outbox_message_consumers);
