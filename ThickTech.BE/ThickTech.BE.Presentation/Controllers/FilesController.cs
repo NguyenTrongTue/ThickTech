@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using ThickTech.BE.Application.Files;
 using ThickTech.BE.Domain.Enums;
 using ThickTech.BE.Domain.Shared;
-using ThickTech.BE.Infrastructure.Authentication;
 using ThickTech.BE.Presentation.Abstractions;
 
 namespace ThickTech.BE.Presentation.Controllers;

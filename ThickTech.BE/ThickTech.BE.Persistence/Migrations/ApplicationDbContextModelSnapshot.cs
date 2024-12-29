@@ -22,6 +22,108 @@ namespace ThickTech.BE.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Blog", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("images")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("user_id");
+
+                    b.ToTable("blogs", (string)null);
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Category", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("category_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("category_slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("id");
+
+                    b.ToTable("categories", (string)null);
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Order", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("address")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("order_status")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("price")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("product_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("user_id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("product_id");
+
+                    b.HasIndex("user_id");
+
+                    b.ToTable("orders", (string)null);
+                });
+
             modelBuilder.Entity("ThickTech.BE.Domain.Entities.Permission", b =>
                 {
                     b.Property<int>("id")
@@ -77,7 +179,13 @@ namespace ThickTech.BE.Persistence.Migrations
                     b.Property<decimal>("price")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("product_category")
+                    b.Property<Guid>("product_category")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("quantity_in")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("quantity_out")
                         .HasColumnType("integer");
 
                     b.Property<string>("title")
@@ -85,6 +193,8 @@ namespace ThickTech.BE.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("id");
+
+                    b.HasIndex("product_category");
 
                     b.ToTable("products", (string)null);
                 });
@@ -212,6 +322,47 @@ namespace ThickTech.BE.Persistence.Migrations
                     b.HasKey("id", "name");
 
                     b.ToTable("outbox_message_consumers", (string)null);
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Blog", b =>
+                {
+                    b.HasOne("ThickTech.BE.Domain.Entities.User", "user")
+                        .WithMany()
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Order", b =>
+                {
+                    b.HasOne("ThickTech.BE.Domain.Entities.Product", "product")
+                        .WithMany()
+                        .HasForeignKey("product_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ThickTech.BE.Domain.Entities.User", "user")
+                        .WithMany()
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("product");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("ThickTech.BE.Domain.Entities.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("product_category")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("category");
                 });
 
             modelBuilder.Entity("ThickTech.BE.Domain.Entities.RolePermission", b =>

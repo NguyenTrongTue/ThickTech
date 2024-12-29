@@ -43,6 +43,7 @@ public sealed class User : AggregateRoot, IAuditableEntity
     /// Ngày sửa thông tin tài khoản
     /// </summary>
     public DateTime? modified_date { get; set; }
+
     public static User Create(
         Guid id,
         Email email,

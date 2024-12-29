@@ -16,5 +16,11 @@ internal sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder
            .Property(x => x.price)
            .HasConversion(x => x.Value, v => Price.Create(v).Value);
+
+        // Thiết lập khóa ngoại đến bảng Category
+        builder.HasOne(x => x.category)
+            .WithMany() // Không có collection Product trong Category
+            .HasForeignKey(x => x.product_category)
+            .OnDelete(DeleteBehavior.Cascade); // Xóa blog khi xóa category
     }
 }
