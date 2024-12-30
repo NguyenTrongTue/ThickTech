@@ -38,8 +38,8 @@ const Header = ({ session }) => {
       link: "/products",
     },
     {
-      title: "Blog",
-      link: "/blogs",
+      title: "Ideas",
+      link: "/ideas",
     },
     {
       title: "Courses",

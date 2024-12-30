@@ -15,10 +15,10 @@ const modules = {
 
 export default function Description({ value, onChange }) {
   return (
-    <section className=" bg-white border-2 p-2 rounded-xl">
+    <section className=" bg-white border p-2 rounded-md border-gray-400">
       <ReactQuill
         theme="snow"
-        value={value || ""}
+        value={value ?? ""}
         onChange={onChange}
         modules={modules}
         placeholder="Enter your description here..."

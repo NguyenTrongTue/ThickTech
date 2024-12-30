@@ -1,0 +1,4 @@
+dotnet ef migrations add "InitApplicationDb1" --project ThickTech.BE.Persistence --startup-project ThickTech.BE.Host --output-dir Migrations --context ApplicationDbContext
+
+
+dotnet ef database update --project ThickTech.BE.Persistence --startup-project ThickTech.BE.Host

@@ -2,8 +2,10 @@ import { Button } from "@nextui-org/react";
 import { Edit2, Trash2 } from "lucide-react";
 import { Tooltip } from "@mui/material";
 import React from "react";
+import { useRouter } from "next/router";
 
-const ProductTable = ({ products, router }) => {
+const ProductTable = ({ products, handleDelete }) => {
+  const router = useRouter();
   return (
     <table className="basic mt-2 table-auto">
       <thead>
@@ -17,7 +19,7 @@ const ProductTable = ({ products, router }) => {
             Sell Price
           </td>
           <td className="text-center whitespace-nowrap hidden lg:table-cell">
-            Feature
+            Quantity
           </td>
           <td className="text-center">Action</td>
         </tr>
@@ -44,7 +46,8 @@ const ProductTable = ({ products, router }) => {
               {product.selling_price}
             </td>
             <td className="text-center hidden lg:table-cell">
-              <span
+              {product.quantity}
+              {/* <span
                 className={`p-1 text-[12px] rounded-md ${
                   product.is_featured === "true"
                     ? "text-green-600 bg-green-200"
@@ -52,7 +55,7 @@ const ProductTable = ({ products, router }) => {
                 }`}
               >
                 {product.is_featured === "true" ? "Yes" : "No"}
-              </span>
+              </span> */}
             </td>
             <td className="text-center">
               <Button
@@ -68,9 +71,7 @@ const ProductTable = ({ products, router }) => {
               <Button
                 isIconOnly
                 size="sm"
-                onClick={() =>
-                  router.push("/admin/products/delete/" + product._id)
-                }
+                onClick={() => handleDelete(product)}
                 className="p-2 border rounded bg-red-200 text-red-600"
               >
                 <Trash2 size={13} />

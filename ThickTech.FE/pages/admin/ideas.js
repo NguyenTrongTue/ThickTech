@@ -12,7 +12,7 @@ import ConfirmModal from "@/components/Modal";
 import { useRouter } from "next/router";
 import moment from "moment";
 
-export default function B() {
+export default function Ideas() {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // Search term

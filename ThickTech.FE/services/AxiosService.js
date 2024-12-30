@@ -9,6 +9,36 @@ class AxiosService {
         "Content-Type": "application/json", // Header mặc định cho JSON
       },
     });
+
+    this.axiosInstance.interceptors.request.use(
+      (config) => {
+        // Thêm token vào header nếu có
+        const token = Cookies.get("token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        console.error("Request error:", error);
+        return Promise.reject(error); // Trả lỗi để xử lý tiếp
+      }
+    );
+
+    // Thêm interceptor cho response
+    this.axiosInstance.interceptors.response.use(
+      (response) => {
+        // Xử lý response thành công
+        return response;
+      },
+      (error) => {
+        console.error("Response error:", error);
+        // Kiểm tra và trả về thông báo lỗi gọn gàng
+        const errorMessage =
+          error.response?.data?.message || "Something went wrong";
+        return Promise.resolve({ success: false, error: errorMessage });
+      }
+    );
   }
 
   /**
@@ -23,7 +53,11 @@ class AxiosService {
       return response.data;
     } catch (error) {
       console.error("Error in GET request:", error);
-      throw new Error(error.response?.data?.message || "GET request failed");
+      // throw new Error(error.response?.data?.message || "GET request failed");
+      return {
+        success: false,
+        error: error.response?.data?.detail || "POST request failed",
+      };
     }
   }
 
@@ -40,7 +74,11 @@ class AxiosService {
       return response.data;
     } catch (error) {
       console.error("Error in POST request:", error);
-      throw new Error(error.response?.data?.message || "POST request failed");
+      // throw new Error(error.response?.data?.message || "POST request failed");
+      return {
+        success: false,
+        error: error.response?.data?.detail || "POST request failed",
+      };
     }
   }
 
@@ -56,7 +94,11 @@ class AxiosService {
       return response.data;
     } catch (error) {
       console.error("Error in PUT request:", error);
-      throw new Error(error.response?.data?.message || "PUT request failed");
+      // throw new Error(error.response?.data?.message || "PUT request failed");
+      return {
+        success: false,
+        error: error.response?.data?.detail || "POST request failed",
+      };
     }
   }
 
@@ -71,7 +113,11 @@ class AxiosService {
       return response.data;
     } catch (error) {
       console.error("Error in DELETE request:", error);
-      throw new Error(error.response?.data?.message || "DELETE request failed");
+      // throw new Error(error.response?.data?.message || "DELETE request failed");
+      return {
+        success: false,
+        error: error.response?.data?.detail || "POST request failed",
+      };
     }
   }
 
@@ -93,7 +139,11 @@ class AxiosService {
       return response; // Trả về dữ liệu từ response
     } catch (error) {
       console.error("Error during file upload:", error);
-      throw error; // Ném lỗi để xử lý bên ngoài nếu cần
+      // throw error; // Ném lỗi để xử lý bên ngoài nếu cần
+      return {
+        success: false,
+        error: error.response?.data?.detail || "POST request failed",
+      };
     }
   }
 

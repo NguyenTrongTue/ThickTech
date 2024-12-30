@@ -4,7 +4,12 @@ import SidebarItem from "@/components/admin/Sidebar/SidebarItem";
 import ClickOutside from "@/components/admin/Sidebar/ClickOutside";
 import useLocalStorage from "@/hook/useLocalStorage";
 import Logo from "@/components/Logo";
-import { ListChecksIcon, ShoppingCart, UserCog2Icon } from "lucide-react";
+import {
+  Earth,
+  ListChecksIcon,
+  ShoppingCart,
+  UserCog2Icon,
+} from "lucide-react";
 
 const menuGroups = [
   {
@@ -87,17 +92,27 @@ const menuGroups = [
         route: "#",
         children: [
           { label: "Products list", route: "/admin/products" },
+          { label: "New product", route: "/admin/products/new" },
           { label: "Categories list", route: "/admin/categories" },
         ],
       },
       {
-        icon: <ListChecksIcon className="h-5 w-5" />,
-        // quản lý blog
-        label: "Blog Management",
+        icon: <Earth className="h-5 w-5" />,
+        label: "Clubs",
         route: "#",
         children: [
-          { label: "Blog list", route: "/admin/blogs" },
-          { label: "Add blog", route: "/admin/blogs/new" },
+          { label: "Clubs list", route: "/admin/clubs" },
+          { label: "New club", route: "/admin/clubs/new" },
+        ],
+      },
+      {
+        icon: <ListChecksIcon className="h-5 w-5" />,
+        // quản lý ideas
+        label: "Ideas",
+        route: "#",
+        children: [
+          { label: "Ideas list", route: "/admin/ideas" },
+          { label: "Add Ideas", route: "/admin/ideas/new" },
         ],
       },
       {

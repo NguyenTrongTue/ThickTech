@@ -1,236 +1,381 @@
-import Button from "@/components/button/ButtonCart";
-import { useContext, useEffect, useState } from "react";
-import React from "react";
-import { CartContext } from "@/components/client/CartContext";
-import MainLayer from "@/components/client/MainLayer";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { ReactSortable } from "react-sortablejs";
 import apiService from "@/services/api";
-import Link from "next/link";
-import formatNumber from "@/utils/formatNumber";
-import ModalConfirm from "@/components/Modal";
+import Input from "@/components/input/InputText";
+import Description from "@/components/admin/Description";
+import toast from "react-hot-toast";
+import InputTextArea from "@/components/input/InputTextArea";
+import { Upload } from "lucide-react";
+import ActionBtn from "@/components/button/ActionBtn";
+import Spinner from "@/components/Spinner";
+import {
+  Button,
+  TextField,
+  Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
-export default function CartPage() {
-  const {
-    cartProducts,
-    addProduct,
-    decreaseProduct,
-    removeProduct,
-    clearCart,
-  } = useContext(CartContext);
-  const [products, setProducts] = useState([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [streetAddress, setStreetAddress] = useState("");
-  const [country, setCountry] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [item_title, setItemTitle] = useState("");
-  const [item_id, setItemId] = useState("");
-  const handleDelete = () => {
-    setIsModalOpen(false);
-    removeProduct(item_id);
-  };
+export default function ProductForm({
+  _id,
+  title: existingTitle,
+  description: existingDescription,
+  original_price: existingOriginalPrice,
+  selling_price: existingSellingPrice,
+  images: existingImages,
+  product_category: existingProductCategory,
+  is_featured: existingIsFeatured,
+  quantity: existingQuantity,
+  headerTitle,
+}) {
+  const [title, setTitle] = useState(existingTitle || "");
+  const [description, setDescription] = useState(existingDescription || "");
+  const [original_price, setOriginalPrice] = useState(
+    existingOriginalPrice || ""
+  );
+  const [selling_price, setSellingPrice] = useState(existingSellingPrice || "");
+  const [product_category, setProductCategory] = useState(
+    existingProductCategory || ""
+  );
+  const [is_featured, setIsFeatured] = useState(existingIsFeatured || false);
+  const [images, setImages] = useState(existingImages || []);
+  const [quantity, setQuantity] = useState(existingQuantity || 0);
 
-  const OpenModal = (id, title) => {
-    setIsModalOpen(true);
-    setItemId(id);
-    setItemTitle(title);
-  };
-  async function fetchCartItems(ids) {
-    try {
-      const response = await apiService.post("/api/cart", { ids });
-      setProducts(response);
-      console.log("response", response);
-    } catch (error) {
-      console.error("Error fetching cart items:", error.message);
-    }
-  }
-  useEffect(() => {
-    if (cartProducts.length > 0) {
-      const ids = cartProducts.map((id) => id.productId);
-      fetchCartItems(ids);
-    } else {
-      setProducts([]);
-    }
-  }, [cartProducts]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const router = useRouter();
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
+    setTitle(existingTitle || "");
+    setDescription(existingDescription || "");
+    setOriginalPrice(existingOriginalPrice || "");
+    setSellingPrice(existingSellingPrice || "");
+    setProductCategory(existingProductCategory || "");
+    setIsFeatured(existingIsFeatured || false);
+    setImages(existingImages || []);
+    setQuantity(existingQuantity || "");
+  }, [
+    existingTitle,
+    existingDescription,
+    existingOriginalPrice,
+    existingProductCategory,
+    existingIsFeatured,
+    existingSellingPrice,
+    existingImages,
+    existingQuantity,
+  ]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await apiService.get("/api/categories");
+        const data = response;
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
     }
-    if (window?.location.href.includes("success")) {
-      setIsSuccess(true);
-      clearCart();
-    }
+
+    fetchCategories();
   }, []);
 
-  function moreOfThisProduct(id) {
-    addProduct(id);
+  const validate = () => {
+    const errors = {};
+    if (!title) {
+      errors.title = "Product name is required";
+    }
+    if (!description) {
+      errors.description = "Description is required";
+    }
+    if (!original_price) {
+      errors.original_price = "Original price is required";
+    }
+    if (!selling_price) {
+      errors.selling_price = "Selling price is required";
+    }
+    if (!product_category) {
+      errors.product_category = "Product category is required";
+    }
+    if (!images.length) {
+      errors.images = "At least one image is required";
+    }
+    if (!quantity) {
+      errors.quantity = "Quantity is required";
+    }
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  async function saveProduct(ev) {
+    ev.preventDefault();
+    setLoading(true);
+    const data = {
+      title,
+      description,
+      original_price,
+      selling_price,
+      product_category,
+      is_featured,
+      images,
+      quantity,
+    };
+
+    if (!validate()) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      if (_id) {
+        // update
+        await apiService.post(`/api/products/${_id}`, ...data);
+      } else {
+        // create
+        await apiService.post("/api/products", data);
+      }
+      console.log(data);
+
+      toast.success("Product saved successfully");
+      // router.push("/admin/products");
+    } catch (error) {
+      toast.error(error);
+
+      console.error("Error saving product:", error);
+    }
+    setLoading(false);
   }
 
-  function lessOfThisProduct(id) {
-    decreaseProduct(id);
-  }
+  async function uploadImages(ev) {
+    const files = ev.target?.files;
+    if (files?.length > 0) {
+      setIsUploading(true);
+      const data = new FormData();
+      //  thêm từng file vào FormData
+      for (const file of files) {
+        data.append("images", file);
+      }
+      data.append("type", "product");
+      try {
+        const res = await apiService.postWithFile("/api/upload", data);
+        // Giả sử API trả về danh sách URL ảnh
+        setImages((oldImages) => {
+          return [...oldImages, ...res.data.file_urls]; // Sử dụng đúng key của API
+        });
+        console.log(images);
 
-  async function goToPayment() {
-    const response = await axios.post("/api/checkout", {
-      name,
-      email,
-      city,
-      postalCode,
-      streetAddress,
-      country,
-      cartProducts,
-    });
-    if (response.data.url) {
-      window.location = response.data.url;
+        toast.success("Images uploaded successfully");
+      } catch (error) {
+        toast.error("Error uploading images");
+        console.error("Error uploading images:", error);
+      }
+      setIsUploading(false);
     }
   }
 
-  let total = 0;
-  for (const product of cartProducts) {
-    console.log("productId", product);
-
-    const productId = product.productId;
-    const quantity = product.quantity;
-    const productInfo = products.find((p) => p._id === productId);
-    if (productInfo) {
-      total += productInfo.selling_price * quantity;
+  async function deleteImage(imageUrl) {
+    toast.loading("Deleting image...");
+    try {
+      await apiService.post("/api/delete_image", { file_url: imageUrl });
+      setImages((oldImages) => oldImages.filter((img) => img !== imageUrl)); // Loại bỏ ảnh đã xóa
+    } catch (error) {
+      toast.error("Error deleting image");
+      console.error("Error deleting image:", error);
     }
+    toast.dismiss();
   }
 
-  if (isSuccess) {
-    return (
-      <>
-        <Header />
-        <div className="grid grid-cols-1 gap-10 mt-10">
-          <div className="bg-white rounded-lg p-8">
-            <h1 className="text-2xl font-semibold">Thanks for your order!</h1>
-            <p className="mt-4">
-              We will email you when your order will be sent.
-            </p>
-          </div>
-        </div>
-      </>
-    );
+  function updateImagesOrder(images) {
+    setImages(images);
   }
 
   return (
-    <MainLayer>
-      <ModalConfirm
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleDelete}
-        message="Bạn chắc chắn muốn bỏ sản phẩm này?"
-        item_title={item_title}
-      />
-      <div className="bg-white rounded-lg p-8 shadow-md">
-        <h2 className="text-xl font-bold mb-4">Giỏ hàng</h2>
+    <div className="min-h-full flex flex-col">
+      <h1 className="text-2xl mb-2 w-full uppercase">{headerTitle}</h1>
+      <div className="overflow-y-auto bg-white rounded-lg shadow-md p-4 gap-4 flex flex-col">
+        <form className="flex flex-1 flex-col gap-4 h-full">
+          <div className="flex flex-col md:flex-row gap-4 flex-1 ">
+            <div className="space-y-6 border-2 p-4 rounded-md flex-1 flex flex-col">
+              <TextField
+                label="Product name *"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                fullWidth
+                size="small"
+                multiline
+                error={!!errors.title}
+                helperText={errors.title}
+                variant="outlined"
+              />
 
-        {!cartProducts?.length && (
-          <div className="text-center text-gray-500">
-            Giỏ hàng của bạn đang trống.
-          </div>
-        )}
+              <FormControl
+                fullWidth
+                error={!!errors?.product_category}
+                size="small"
+              >
+                <InputLabel id="product-category">
+                  Product Category *
+                </InputLabel>
+                <Select
+                  labelId="product-category"
+                  value={product_category}
+                  onChange={(e) => setProductCategory(e.target.value)}
+                  label="Product Category *"
+                >
+                  <MenuItem value="">Uncategorized</MenuItem>
+                  {categories.map((category) => (
+                    <MenuItem key={category._id} value={category._id}>
+                      {category.category_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors?.product_category && (
+                  <FormHelperText>{errors.product_category}</FormHelperText>
+                )}
+              </FormControl>
 
-        {products?.length > 0 && (
-          <div>
-            <div className="w-full table-auto border-collapse grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {products.map((product) => {
-                const productQuantity = cartProducts.filter(
-                  (item) => item.productId === product._id
-                )[0]?.quantity;
-                const productTotal = product.selling_price * productQuantity;
-                return (
-                  <React.Fragment key={product._id} className="w-full">
-                    <div className="bg-white flex flex-row border border-gray-300  rounded-md">
-                      <div className="px-4 py-2 flex items-center flex-col">
-                        <Link
-                          href={`/product/${product._id}`}
-                          className="flex items-center"
+              <TextField
+                required
+                type="number"
+                label="Original price (VND)"
+                placeholder="Enter original price"
+                value={original_price}
+                onChange={(ev) => setOriginalPrice(ev.target.value)}
+                error={!!errors.original_price}
+                helperText={errors.original_price}
+                fullWidth
+                size="small"
+                variant="outlined"
+              />
+
+              <TextField
+                required
+                type="number"
+                label="Selling price (VND)"
+                placeholder="Enter selling price"
+                value={selling_price}
+                onChange={(ev) => setSellingPrice(ev.target.value)}
+                error={!!errors.selling_price}
+                helperText={errors.selling_price}
+                fullWidth
+                size="small"
+                variant="outlined"
+              />
+              {/* sô lượng sản phẩm nhập khokho */}
+              <TextField
+                required
+                type="number"
+                label="Quantity"
+                placeholder="Enter quantity"
+                value={quantity}
+                onChange={(ev) => setQuantity(ev.target.value)}
+                error={!!errors.quantity}
+                helperText={errors.quantity}
+                fullWidth
+                size="small"
+                variant="outlined"
+              />
+            </div>
+            <div className="space-y-4 border-2 p-4 rounded-md flex flex-col flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Photos <span className="text-red-500">*</span>
+              </label>
+              <div className="mt-2 flex flex-wrap gap-4">
+                <ReactSortable
+                  list={images}
+                  setList={updateImagesOrder}
+                  className="flex flex-wrap gap-4"
+                >
+                  {!!images?.length &&
+                    images.map((img, index) => (
+                      <div
+                        key={index}
+                        className="relative w-24 h-24 bg-gray-100 rounded-lg shadow-inner overflow-hidden"
+                      >
+                        <img
+                          src={img}
+                          alt="Preview"
+                          className="object-cover w-full h-full"
+                        />
+                        <button
+                          type="button"
+                          className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 hover:bg-red-700"
+                          onClick={() => deleteImage(img)}
                         >
-                          <div className="min-w-[4rem] max-w-[4rem] min-h-[4rem] max-h-[4rem] h-[4rem] w-[4rem] p-1 border border-red-500 rounded-lg flex justify-center items-center">
-                            <img
-                              src={product.images[0]}
-                              alt={product.title}
-                              className="object-cover rounded-md w-full h-full"
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
                             />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="ml-4 text-sm font-medium">
-                              {product.title}
-                            </span>
-                            <div>
-                              <span className="ml-4 text-sm font-medium text-gray-500">
-                                {formatNumber(product.original_price)}đ
-                              </span>
-                              <span className="ml-3 text-sm font-medium text-gray-700">
-                                {formatNumber(product.selling_price)}đ
-                              </span>
-                            </div>
-                          </div>
-                        </Link>
-
-                        <div className="flex items-center">
-                          <button
-                            onClick={() => lessOfThisProduct(product._id)}
-                            className="px-3 py-1 border border-slate-600 hover:bg-gray-300"
-                          >
-                            -
-                          </button>
-                          <span
-                            className="text-center border-t border-b border-gray-300 py-1 focus:outline-none w-12"
-                            min="1"
-                          >
-                            {productQuantity}
-                          </span>
-                          <button
-                            onClick={() => moreOfThisProduct(product._id)}
-                            className="px-3 py-1 border  border-slate-600 hover:bg-gray-300"
-                          >
-                            +
-                          </button>
-                        </div>
+                          </svg>
+                        </button>
                       </div>
-                      <div className="px-4 py-2 text-center"></div>
+                    ))}
+                </ReactSortable>
+                {isUploading && (
+                  <div className="relative w-24 h-24 bg-gray-100 rounded-lg shadow-inner overflow-hidden flex items-center justify-center">
+                    <Spinner />
+                  </div>
+                )}
 
-                      <div className="px-4 py-2 text-center">
-                        <Button
-                          onClick={() => OpenModal(product._id, product.title)}
-                          className="text-red-600"
-                        >
-                          Xóa
-                        </Button>
-                      </div>
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-              {/* Tổng cộng */}
-
-              {/* Tiết kiệm */}
-              <tr>
-                <td colSpan="4" className="text-right px-4 py-2 text-gray-600">
-                  Tiết kiệm:
-                </td>
-                <td className="px-4 py-2 text-center">${}</td>
-                <td className="px-4 py-2"></td>
-              </tr>
+                <label className="w-24 h-24 cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:bg-slate-300 text-slate-500 rounded-lg">
+                  <Upload size={24} />
+                  <span className="mt-1 text-sm">Add image</span>
+                  <input
+                    type="file"
+                    onChange={uploadImages}
+                    className="hidden"
+                    multiple
+                  />
+                </label>
+              </div>
+              {errors.images && (
+                <Typography variant="caption" color="error">
+                  {errors.images}
+                </Typography>
+              )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description <span className="text-red-500">*</span>
+                </label>
+                <Description
+                  value={description || ""}
+                  onChange={setDescription}
+                />
+                {errors.description && (
+                  <Typography variant="caption" color="error">
+                    {errors.description}
+                  </Typography>
+                )}
+              </div>
             </div>
           </div>
-        )}
-
-        <div className="font-bold border-t border-gray-300 mt-6 pt-2 flex justify-end">
-          <div className="flex flex-row items-center">
-            <span>Tổng thanh toán:</span>
-            <div className="px-4 py-2 text-red-500 items-start flex flex-row">
-              <span className="text-sm">đ</span>
-              {formatNumber(total)}
-            </div>
+          <div className="text-right w-full">
+            <ActionBtn
+              className="px-4 py-2 text-white bg-violet-500 hover:bg-violet-700 rounded-md outline-double "
+              type="submit"
+              onClick={saveProduct}
+              loading={loading}
+              disabled={loading}
+            >
+              Save
+            </ActionBtn>
           </div>
-        </div>
+        </form>
       </div>
-    </MainLayer>
+    </div>
   );
 }

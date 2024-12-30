@@ -12,3 +12,24 @@ npm run dev
 
 
 ```
+
+<!-- form data club  -->
+<!-- {
+  "clubName": "Football Club",
+  "clubTitle": "Câu lạc bộ bóng đá",
+  "clubDescription": "Mô tả về câu lạc bộ",
+  "clubGoals": "Xây dựng đội bóng mạnh",
+  "clubImages": [FileList],
+  "steps": [
+    {
+      "name": "Khởi động",
+      "content": "Luyện tập các kỹ năng cơ bản",
+      "image": "image1.jpg"
+    },
+    {
+      "name": "Nâng cao",
+      "content": "Luyện tập kỹ năng chiến thuật",
+      "image": "image2.jpg"
+    }
+  ]
+} -->

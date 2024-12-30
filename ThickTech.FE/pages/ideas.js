@@ -1,6 +1,6 @@
 import MainLayer from "@/components/client/MainLayer";
 import { getAllPosts } from "@/api/blog";
-import Post from "@/components/client/blog/Post";
+import Post from "@/components/client/idea/Post";
 export async function getStaticProps() {
   const res = await getAllPosts();
   return {
@@ -10,10 +10,10 @@ export async function getStaticProps() {
   };
 }
 
-export default function Blog({ posts }) {
+export default function Ideas({ posts }) {
   return (
     <MainLayer
-      title="Blogs-ThickTech"
+      title="Ideas -ThickTech"
       description="Các bài viết về ý tưởng sáng tạo, dự án của ThickTech"
     >
       <div className="container mx-auto">

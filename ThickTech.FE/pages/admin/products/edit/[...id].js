@@ -43,7 +43,7 @@ export default function EditProductPage() {
   return (
     <Layout>
       {productInfo && (
-        <ProductForm {...productInfo} headerTitle="Edit Product" />
+        <ProductForm product={productInfo} headerTitle="Edit Product" />
       )}
     </Layout>
   );

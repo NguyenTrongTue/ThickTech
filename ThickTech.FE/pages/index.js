@@ -1,6 +1,7 @@
-import Featured from "@/components/client/Featured";
+import Featured from "@/components/client/home/Featured";
+import Hero from "@/components/client/home/Hero";
+import Feature from "@/components/client/home/Feature";
 import MainLayer from "@/components/client/MainLayer";
-import apiService from "@/services/api";
 import React from "react";
 import { getAllProducts } from "@/api/product";
 export default function HomePage({ featuredProduct }) {
@@ -9,6 +10,8 @@ export default function HomePage({ featuredProduct }) {
       title="Trang chủ - ThickTech"
       description="Lớp học đa dạng, uy tín về công nghệ thông tin."
     >
+      <Hero product={featuredProduct} />
+      <Feature />
       <Featured product={featuredProduct} />
     </MainLayer>
   );

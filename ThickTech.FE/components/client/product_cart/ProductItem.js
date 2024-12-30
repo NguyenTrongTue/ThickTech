@@ -1,9 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import ActionBtn from "@/components/button/ActionBtn";
 import FormatNumber from "@/utils/formatNumber";
-import { Trash2Icon, TrashIcon } from "lucide-react";
-import { Button } from "@nextui-org/react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
 
 export default function ProductItem({
   product,
@@ -69,15 +68,13 @@ export default function ProductItem({
           </div>
         </div>
       </div>
-      <div className="text-center">
-        <Button
-          onPress={() => openModal(product._id, product.title)}
-          className={
-            "border rounded border-gray-600 p-1 bg-slate-500 text-white"
-          }
+      <div className="text-center relative">
+        <IconButton
+          onClick={() => openModal(product._id, product.title)}
+          className="-mt-2 -mr-2 rounded-full p-2 hover:bg-slate-300"
         >
-          <Trash2Icon size={24} />
-        </Button>
+          <DeleteIcon color="error" />
+        </IconButton>
       </div>
     </div>
   );

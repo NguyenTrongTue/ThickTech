@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import Description from "@/components/admin/Description";
 import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
+import Spinner from "@/components/Spinner";
+import ActionButton from "@/components/button/ActionBtn";
+
 import {
   TextField,
   Button,
@@ -11,13 +14,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { styled } from "@mui/system";
-const ActionButton = styled(Button)({
-  backgroundColor: "#7c3aed",
-  "&:hover": {
-    backgroundColor: "#5b21b6",
-  },
-});
+
 export default function BlogEditor({
   _id,
   author: existingAuthor,

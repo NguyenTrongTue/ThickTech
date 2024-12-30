@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 
-import BlogHeader from "@/components/client/blog/BlogHeader";
-import BlogBody from "@/components/client/blog/BlogBody";
-import Post from "@/components/client/blog/Post";
-import ShareButton from "@/components/client/blog/ShareButton";
+import BlogHeader from "@/components/client/idea/IdeaHeader";
+import BlogBody from "@/components/client/idea/IdeaBody";
+import Post from "@/components/client/idea/Post";
+import ShareButton from "@/components/client/idea/ShareButton";
 
 import { getPostBySlug, getMorePosts, getAllPostsWithSlug } from "@/api/blog";
 import { Typography } from "@mui/material";

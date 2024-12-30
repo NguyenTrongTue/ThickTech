@@ -1,50 +1,59 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import Cookies from "js-cookie"; // Import js-cookie để làm việc với cookies
-import { useSession } from "next-auth/react"; // Import hook useSession từ next-auth/react
+import React, { createContext, useContext, useState, useEffect } from "react";
+import Cookies from "js-cookie";
+
+// Tạo context để cung cấp thông tin xác thực
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const { data: session, status } = useSession();
-  const [user, setUser] = useState(session || null);
+// Provider để bao quanh ứng dụng và cung cấp trạng thái người dùng
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      // Kiểm tra cookie xem có tồn tại thông tin người dùng không
-      const savedUser = Cookies.get("user");
-      if (savedUser) {
-        setUser(JSON.parse(savedUser)); // Nếu có, set giá trị vào state
-      }
-    } catch (error) {
-      console.error("Lỗi khi đọc thông tin từ cookie:", error);
-      Cookies.remove("user"); // Xóa cookie nếu lỗi xảy ra
+    const token = Cookies.get("auth_token");
+    if (token) {
+      // Giả sử bạn có một API để lấy thông tin người dùng từ token
+      fetchUserInfo(token);
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  const login = (userData) => {
+  const fetchUserInfo = async (token) => {
+    // Gọi API để lấy thông tin người dùng từ token (ví dụ: JWT)
     try {
-      Cookies.set("user", JSON.stringify(userData), { expires: 7 }); // Lưu thông tin vào cookie, hết hạn sau 7 ngày
-      setUser(userData);
+      const response = await fetch("/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.user) {
+        setUser(data.user);
+      }
     } catch (error) {
-      console.error("Lỗi khi lưu thông tin người dùng vào cookie:", error);
+      console.error("Failed to fetch user info:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const login = (token) => {
+    Cookies.set("auth_token", token, { expires: 7, secure: true });
+    fetchUserInfo(token); // Sau khi login, lấy thông tin người dùng
   };
 
   const logout = () => {
-    try {
-      Cookies.remove("user"); // Xóa cookie khi đăng xuất
-      setUser(null);
-    } catch (error) {
-      console.error("Lỗi khi xóa thông tin người dùng từ cookie:", error);
-    }
+    Cookies.remove("auth_token");
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+// Custom hook để sử dụng context
+export const useAuth = () => useContext(AuthContext);
