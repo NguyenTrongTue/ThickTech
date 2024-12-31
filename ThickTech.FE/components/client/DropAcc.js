@@ -2,7 +2,6 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import ButtonOutline from "../button/ButtonOutline";
 export default function DropAcc() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { data: session } = useSession();
@@ -32,8 +31,8 @@ export default function DropAcc() {
       </button>
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200">
-          <div className="px-4 py-2 border-b border-gray-200">
-            <span>{session?.user?.name || "User"}</span>
+          <div className="px-4 py-2 border-b border-gray-200 overflow-hidden whitespace-nowrap">
+            <span>{session?.user?.email || "User"}</span>
           </div>
 
           <Link

@@ -1,33 +1,37 @@
-import { useSession, signIn } from "next-auth/react";
-import { useEffect } from "react";
 import SidePageAuth from "./SidePageAuth";
 import Link from "next/link";
-import Spinner from "@/components/Spinner";
-
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 
 export default function LoginForm() {
-  const { data: session, status } = useSession();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
-  // Chuyển hướng đến trang chủ khi đăng nhập thành công
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/"); // Đường dẫn tới trang chủ
-    }
-  }, [status, router]);
+  const handleGoogleSignIn = async () => {
+    // Đăng nhập bằng Google
+    await signIn("google", { callbackUrl: "/" });
+  };
 
-  if (status === "loading") {
-    // Hiển thị trạng thái đang tải
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <Spinner />
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Gọi NextAuth signIn để xử lý đăng nhập
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result?.error) {
+      setErrorMessage("Invalid email or password");
+    } else {
+      // Nếu đăng nhập thành công, chuyển hướng về trang chính hoặc trang người dùng
+      router.push("/dashboard"); // Đổi đường dẫn tới trang bạn muốn chuyển hướng sau khi đăng nhập thành công
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-5 bg-white mb-20">
@@ -38,7 +42,7 @@ export default function LoginForm() {
             <h2 className="text-2xl font-bold text-slate-800 sm:text-title-xl2 text-center">
               Đăng nhập ThickTech
             </h2>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="mb-2.5 block font-medium text-slate-800">
                   Email
@@ -46,6 +50,9 @@ export default function LoginForm() {
                 <div className="relative">
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                     placeholder="Enter your email"
                     className="border-red-300 w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none"
                   />
@@ -77,6 +84,11 @@ export default function LoginForm() {
                 <div className="relative">
                   <input
                     type="password"
+                    id="password"
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                     placeholder="Enter your password"
                     className="border-red-300 w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none"
                   />
@@ -104,6 +116,9 @@ export default function LoginForm() {
                   </span>
                 </div>
               </div>
+              {errorMessage && (
+                <p className="text-red-500 text-sm mb-3">{errorMessage}</p>
+              )}
 
               <div className="mb-5">
                 <input
@@ -115,7 +130,7 @@ export default function LoginForm() {
             </form>
 
             <button
-              onClick={() => signIn("google")}
+              onClick={handleGoogleSignIn}
               className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"
             >
               <span>

@@ -8,17 +8,12 @@ import { signOut } from "next-auth/react";
 import DropAcc from "@/components/client/DropAcc";
 import ButtonLink from "../button/ButtonLink";
 import { Tooltip } from "@mui/material";
-import {
-  Car,
-  Earth,
-  EarthIcon,
-  HomeIcon,
-  ListChecks,
-  LucideEarth,
-} from "lucide-react";
+import { useSession } from "next-auth/react";
+import { HomeIcon, ListChecks, LucideEarth } from "lucide-react";
 import { ListAltOutlined, ListAltRounded } from "@mui/icons-material";
 
-const Header = ({ session }) => {
+const Header = () => {
+  const { data: session } = useSession();
   const { cartProducts } = useContext(CartContext);
   const inactiveLink = " text-gray-900 hover:text-red-500 ";
   const activeLink = " text-red-500 font-semibold animation-active ";
@@ -109,7 +104,7 @@ const Header = ({ session }) => {
                 />
               </svg>
             </Link>
-            {session?.user ? (
+            {session ? (
               <div>
                 <DropAcc />
               </div>
@@ -127,7 +122,7 @@ const Header = ({ session }) => {
               </>
             )}
 
-            {session?.isAdmin ? (
+            {session ? (
               <ButtonLink
                 href="/admin"
                 color="red"
