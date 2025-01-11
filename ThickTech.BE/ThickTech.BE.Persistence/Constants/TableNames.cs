@@ -23,4 +23,10 @@ internal static class TableNames
     internal const string role_permission = nameof(role_permission);
 
     internal const string role_user = nameof(role_user);
+
+    internal const string files = nameof(files);
+
+    internal const string clubs = nameof(clubs);
+
+    internal const string club_details = nameof(club_details);
 }

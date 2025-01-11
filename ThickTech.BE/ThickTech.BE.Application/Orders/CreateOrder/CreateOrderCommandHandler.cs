@@ -27,7 +27,7 @@ internal sealed class CreateOrderCommandHandler : ICommandHandler<CreateOrderCom
                 request.address,
                 request.order_status
             );
-        _orderRepository.Add(order);
+        await _orderRepository.Add(order);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }

@@ -17,7 +17,7 @@ public sealed class ProductsController : ApiController
         : base(sender)
     {
     }
-    [HasPermission(Permission.Product)]
+    //[HasPermission(Permission.Product)]
     [HttpPost]
     public async Task<IActionResult> CreateProduct(
        [FromBody] CreateProductRequest request,
