@@ -3,6 +3,7 @@
     public enum FileType
     {
         Product,
-        Blog
+        Blog,
+        Club
     }
 }

@@ -17,10 +17,17 @@ public class FilesController : ApiController
     }
     //[HasPermission(Permission.Product)]
     [HttpPost("add_file")]
-    public async Task<IActionResult> GetUserById(List<IFormFile> formFiles, FileType fileType, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddFile(List<IFormFile> formFiles, FileType fileType, CancellationToken cancellationToken)
     {
         var commnad = new CreateFileCommand(formFiles, fileType);
         Result<string> response = await Sender.Send(commnad, cancellationToken);
+        return response.IsSuccess ? Ok(response.Value) : NotFound(response.Error);
+    }
+    [HttpPost("delete_file")]
+    public async Task<IActionResult> DeleteFile(string fileName, FileType fileType, CancellationToken cancellationToken)
+    {
+        var commnad = new DeleteFileCommand(fileName, fileType);
+        Result<bool> response = await Sender.Send(commnad, cancellationToken);
         return response.IsSuccess ? Ok(response.Value) : NotFound(response.Error);
     }
 }

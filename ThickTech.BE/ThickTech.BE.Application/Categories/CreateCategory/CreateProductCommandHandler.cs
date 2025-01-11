@@ -17,13 +17,13 @@ internal sealed class CreateCategoryCommandHandler : ICommandHandler<CreateCateg
         _unitOfWork = unitOfWork;
     }
     public async Task<Result<bool>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
-    {        
+    {
         var category = Category.Create(
                 Guid.NewGuid(),
                 request.category_name,
                 request.category_slug
             );
-        _categoryRepository.Add(category);
+        await _categoryRepository.Add(category);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }

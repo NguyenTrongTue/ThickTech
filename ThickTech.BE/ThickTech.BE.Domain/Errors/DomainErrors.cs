@@ -28,30 +28,37 @@ public static class DomainErrors
         public static readonly Error NotFound = new(
             "Product.NotFound",
             "Không tìm thấy sản phẩm");
-       
+
     }
-     public static class Category
+
+    public static class Category
     {
         public static readonly Error NotFound = new(
             "Category.NotFound",
             "Không tìm thấy danh mục sản phẩm");
-       
+
     }
-     public static class Blog
+    public static class Blog
     {
         public static readonly Error NotFound = new(
             "Blog.NotFound",
             "Không tìm thấy bài viết");
-       
+
     }
-     public static class Order
+    public static class Order
     {
         public static readonly Error NotFound = new(
             "Order.NotFound",
             "Không tìm thấy đơn hàng");
-       
-    }
 
+    }
+    public static class Club
+    {
+        public static readonly Error NotFound = new(
+            "Club.NotFound",
+            "Không tìm thấy câu lạc bộ");
+
+    }
     public static class Email
     {
         public static readonly Error Empty = new(
@@ -99,6 +106,10 @@ public static class DomainErrors
         public static readonly Error TypeFileError = new(
             "File.TypeFileError",
             "File bạn tạo không có trong danh mục nào");
+
+        public static readonly Error NotFound = new(
+           "File.NotFound",
+           "Không tìm thấy file");
     }
     public static class Price
     {

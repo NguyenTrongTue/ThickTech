@@ -8,14 +8,20 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
 {
     private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IFileService _fileService;
+    private readonly IFileRepository _fileRepository;
 
     public CreateProductCommandHandler(
         IProductRepository productRepository,
         IUnitOfWork unitOfWork
-        )
+,
+        IFileService fileService,
+        IFileRepository fileRepository)
     {
         _productRepository = productRepository;
         _unitOfWork = unitOfWork;
+        _fileService = fileService;
+        _fileRepository = fileRepository;
     }
     public async Task<Result<bool>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
@@ -38,7 +44,9 @@ internal sealed class CreateProductCommandHandler : ICommandHandler<CreateProduc
             discountPriceResult.Value.Value,
             request.images);
 
-        _productRepository.Add(product);
+        await _productRepository.Add(product);
+        await _fileService.HandleDeleteFileTemp();
+        await _fileRepository.DeleteTempFilesOlderThanAnHour();
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }

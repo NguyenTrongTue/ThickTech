@@ -25,7 +25,7 @@ internal sealed class CreateBlogCommandHandler : ICommandHandler<CreateBlogComma
                 request.content,
                 request.images
             );
-        _blogRepository.Add(blog);
+        await _blogRepository.Add(blog);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;
     }

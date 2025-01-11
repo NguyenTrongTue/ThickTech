@@ -33,6 +33,7 @@
 
 	<ItemGroup>
 	  <Folder Include="wwwroot\Blogs\" />
+	  <Folder Include="wwwroot\Clubs\" />
 	  <Folder Include="wwwroot\Products\" />
 	</ItemGroup>
 

@@ -51,7 +51,7 @@ internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserComma
             userNameResult.Value,
             passwordHash, passwordSalt);
 
-        _userRepository.Add(user);
+        await _userRepository.Add(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return user.id;
     }

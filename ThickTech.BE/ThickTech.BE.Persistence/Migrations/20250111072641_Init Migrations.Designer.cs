@@ -12,8 +12,8 @@ using ThickTech.BE.Persistence;
 namespace ThickTech.BE.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241229083257_Update 10.32 29.12.2024")]
-    partial class Update103229122024
+    [Migration("20250111072641_Init Migrations")]
+    partial class InitMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,6 +84,98 @@ namespace ThickTech.BE.Persistence.Migrations
                     b.HasKey("id");
 
                     b.ToTable("categories", (string)null);
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Club", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("club_description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("club_goals")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("club_images")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("club_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("club_title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("created_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("id");
+
+                    b.ToTable("clubs", (string)null);
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.ClubDetail", b =>
+                {
+                    b.Property<Guid>("club_detail_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("images")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("master_id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("club_detail_id");
+
+                    b.HasIndex("master_id");
+
+                    b.ToTable("club_details", (string)null);
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.FileEntity", b =>
+                {
+                    b.Property<Guid>("file_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("file_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("file_type")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("is_temp")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("file_id");
+
+                    b.ToTable("files", (string)null);
                 });
 
             modelBuilder.Entity("ThickTech.BE.Domain.Entities.Order", b =>
@@ -338,6 +430,17 @@ namespace ThickTech.BE.Persistence.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.ClubDetail", b =>
+                {
+                    b.HasOne("ThickTech.BE.Domain.Entities.Club", "club")
+                        .WithMany("details")
+                        .HasForeignKey("master_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("club");
+                });
+
             modelBuilder.Entity("ThickTech.BE.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ThickTech.BE.Domain.Entities.Product", "product")
@@ -404,6 +507,11 @@ namespace ThickTech.BE.Persistence.Migrations
                     b.Navigation("role");
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("ThickTech.BE.Domain.Entities.Club", b =>
+                {
+                    b.Navigation("details");
                 });
 
             modelBuilder.Entity("ThickTech.BE.Domain.Entities.Permission", b =>

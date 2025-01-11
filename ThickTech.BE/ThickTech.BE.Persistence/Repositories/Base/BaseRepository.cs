@@ -12,11 +12,11 @@ namespace ThickTech.BE.Persistence.Repositories.Base
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _dbSet = _dbContext.Set<TEntity>();
         }
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
         }
 
         public void Update(TEntity entity)
