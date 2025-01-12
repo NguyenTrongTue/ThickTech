@@ -31,6 +31,6 @@ internal sealed class SendWelcomeEmailWhenMemberRegisteredDomainEventHandler
             return;
         }
 
-        await _emailService.SendWelcomeEmailAsync(member, cancellationToken);
+        //_emailService.SendWelcomeEmailAsync(member, cancellationToken);
     }
 }
