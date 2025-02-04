@@ -73,7 +73,7 @@ public sealed class OrdersController : ApiController
     [HttpDelete]
     public async Task<IActionResult> DeleteOrderById(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteOrderCommand(id);
+        var command = new BaseDeleteCommand(id);
         Result<bool> result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {

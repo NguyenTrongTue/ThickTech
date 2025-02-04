@@ -37,12 +37,12 @@ public sealed class BlogsController : ApiController
             new { id = result.Value },
             result.Value);
     }
-   
+
     // [HasPermission(Permission.Product)]
     [HttpGet("get_all_blogs")]
     public async Task<IActionResult> GetAllBlogs(CancellationToken cancellationToken)
     {
-        var query = new GetAllBlogsQuery();
+        var query = new BaseGetAllQuery<Blog>();
         Result<List<Blog>> result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
@@ -71,7 +71,7 @@ public sealed class BlogsController : ApiController
     [HttpDelete]
     public async Task<IActionResult> DeleteBlogById(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteBlogCommand(id);
+        var command = new BaseDeleteCommand(id);
         Result<bool> result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
@@ -91,7 +91,7 @@ public sealed class BlogsController : ApiController
             request.user_id,
             request.title,
             request.content,
-            request.images        
+            request.images
             );
         Result<bool> result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)

@@ -16,11 +16,24 @@ public sealed class ProductRepository : BaseRepository<Product>, IProductReposit
     public async Task<List<Product>> GetProductByCategory(Guid productCategory, CancellationToken cancellationToken = default)
     {
         if (productCategory == Guid.Empty)
-           throw new ArgumentNullException(nameof(productCategory));
+            throw new ArgumentNullException(nameof(productCategory));
 
         return await _products
             .Where(product => product.product_category == productCategory)
             .OrderByDescending(product => product.quantity_out)
             .ToListAsync();
     }
+
+    public async Task<List<Product>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        if (ids == null || !ids.Any())
+        {
+            throw new ArgumentException("The list of IDs cannot be null or empty.", nameof(ids));
+        }
+
+        return await _products
+            .Where(product => ids.Contains(product.id))
+            .ToListAsync(cancellationToken);
+    }
+
 }
