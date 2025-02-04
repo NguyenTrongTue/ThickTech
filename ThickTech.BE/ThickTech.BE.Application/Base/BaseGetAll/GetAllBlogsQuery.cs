@@ -1,4 +1,3 @@
 ﻿using ThickTech.BE.Application.Abstractions;
 namespace ThickTech.BE.Application;
-
-public sealed record DeleteBlogCommand(Guid id) : ICommand<bool>;
+public sealed record BaseGetAllQuery<TEntity>() : IQuery<List<TEntity>>;

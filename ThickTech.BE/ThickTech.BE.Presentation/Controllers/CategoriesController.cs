@@ -55,7 +55,7 @@ public sealed class CategoriesController : ApiController
     [HttpDelete]
     public async Task<IActionResult> DeleteCategoryById(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteCategoryCommand(id);
+        var command = new BaseDeleteCommand(id);
         Result<bool> result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {

@@ -91,7 +91,7 @@ public sealed class ProductsController : ApiController
     [HttpDelete]
     public async Task<IActionResult> DeleteProductById(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteProductCommand(id);
+        var command = new BaseDeleteCommand(id);
         Result<bool> result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
@@ -124,6 +124,20 @@ public sealed class ProductsController : ApiController
         }
         return CreatedAtAction(
             nameof(UpdateProductById),
+            new { id = result.Value },
+            result.Value);
+    }
+    [HttpPost("get_product_by_ids")]
+    public async Task<IActionResult> GetProductByIds(List<Guid> ids, CancellationToken cancellationToken)
+    {
+        var query = new GetProductByIdsQuery(ids);
+        Result<List<ProductResponse>> result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return HandleFailure(result);
+        }
+        return CreatedAtAction(
+            nameof(GetProductById),
             new { id = result.Value },
             result.Value);
     }
