@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/NguyenTrongTue/ThickTech.git'
+                git branch: 'main', 
+                    url: 'https://github.com/NguyenTrongTue/ThickTech.git'
             }
         }     
     }
